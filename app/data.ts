@@ -4,7 +4,7 @@ export const profile = {
   name: "Bryan Rumuy",
   role: "Data Science and Artificial Intelligence",
   tagline:
-    "Graduate who builds data-driven models and web systems for real business needs.",
+    "I build data-driven models and web systems for real business needs.",
   facts: [
     { label: "Based in", value: "Surabaya, Indonesia" },
     { label: "Experience", value: "2 client projects delivered" },
