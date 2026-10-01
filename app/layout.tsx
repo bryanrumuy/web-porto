@@ -13,9 +13,9 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
-  title: "Bryan Rumuy | Data Science & Web Developer",
+  title: "Bryan Rumuy | Data Science and Artificial Intelligence",
   description:
-    "Portfolio of Bryan Rumuy, Data Science graduate and web developer based in Surabaya.",
+    "Portfolio of Bryan Rumuy, Data Science and Artificial Intelligence graduate based in Surabaya.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

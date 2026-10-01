@@ -26,7 +26,7 @@ function Section({
     <section
       id={id}
       aria-labelledby={`${id}-title`}
-      className="mx-auto grid max-w-6xl scroll-mt-8 gap-8 px-6 py-20 lg:grid-cols-3 lg:gap-12"
+      className="mx-auto grid max-w-6xl scroll-mt-8 gap-8 px-6 py-14 lg:grid-cols-3 lg:gap-12"
     >
       <h2
         id={`${id}-title`}
@@ -70,17 +70,17 @@ export default function Home() {
       </header>
 
       <main className="flex-1">
-        <section className="relative flex min-h-svh items-center overflow-hidden">
+        <section className="relative flex min-h-[min(100svh,44rem)] items-center overflow-hidden">
           <ClusterField />
-          <div className="relative mx-auto w-full max-w-6xl px-6 pb-20 pt-32">
+          <div className="relative mx-auto w-full max-w-6xl px-6 pb-12 pt-28">
             <h1
-              className="animate-rise font-display text-5xl font-extrabold leading-none tracking-tight sm:text-6xl lg:text-7xl"
+              className="animate-rise -ml-[0.055em] font-display text-5xl font-extrabold leading-none tracking-tight sm:text-6xl lg:text-7xl"
               style={{ animationDelay: "80ms" }}
             >
               {profile.name}
             </h1>
             <p
-              className="animate-rise tone-violet mt-4 font-display text-xl font-semibold text-tone sm:text-2xl"
+              className="animate-rise tone-violet -ml-[0.04em] mt-4 font-display text-xl font-semibold text-tone sm:text-2xl"
               style={{ animationDelay: "200ms" }}
             >
               {profile.role}

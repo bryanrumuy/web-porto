@@ -2,13 +2,13 @@ export type Tone = "violet" | "pink" | "cyan" | "amber";
 
 export const profile = {
   name: "Bryan Rumuy",
-  role: "Data Scientist & Web Developer",
+  role: "Data Science and Artificial Intelligence",
   tagline:
-    "Data Science graduate who builds data-driven models and web systems for real business needs.",
+    "Graduate who builds data-driven models and web systems for real business needs.",
   facts: [
-    { label: "Education", value: "Universitas Surabaya, 2026" },
-    { label: "Focus", value: "Data science and full-stack web" },
     { label: "Based in", value: "Surabaya, Indonesia" },
+    { label: "Experience", value: "2 client projects delivered" },
+    { label: "Open to", value: "Data Scientist and Web Developer roles" },
   ],
   location: "Surabaya, Indonesia",
   email: "rumuybryan@gmail.com",
@@ -22,7 +22,7 @@ export const education = {
   school: "Universitas Surabaya",
   period: "Aug 2022 - Aug 2026",
   degree:
-    "Bachelor's Degree in Computer Science, specialization in Data Science and Artificial Intelligence",
+    "Bachelor's Degree in Informatics Engineering, specialization in Data Science and Artificial Intelligence",
 } as const;
 
 export const projects = [
