@@ -397,6 +397,11 @@ export const projectShots: Readonly<
 // Skills and deliverables per project, shown as chips under the goals.
 export const projectStacks: Readonly<Record<string, readonly string[]>> = {
   "Office Finance System": [
+    "PHP",
+    "Laravel",
+    "MySQL",
+    "Bootstrap",
+    "Chart.js",
     "Role-based Access Control",
     "Two-factor Authentication",
     "PDF & Excel Reporting",
