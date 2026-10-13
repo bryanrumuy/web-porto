@@ -1,0 +1,475 @@
+/* Projects page: the overworld map. Colours come from the sky theme tokens. */
+
+.map {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 8px 0 300px;
+  background: linear-gradient(#7ec8f2 0 14%, #96d3f6 14% 30%, #aadcf9 30% 48%, #bfe6fb 48% 100%);
+}
+
+.map-inner {
+  position: relative;
+  margin-inline: auto;
+  max-width: 72rem;
+  padding-inline: 16px;
+}
+
+/* ---- Backdrop: parallax layers, all decorative ---- */
+.map-sky {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.skyline {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  display: block;
+}
+.sky-mountains { bottom: 90px; }
+.sky-hills-far { bottom: 0; }
+.sky-hills-near { bottom: 0; }
+
+.fly {
+  position: absolute;
+  left: var(--x, 0);
+  animation: drift linear infinite;
+}
+
+@keyframes drift {
+  from { transform: translateX(calc(-1 * var(--x, 0px) - 280px)); }
+  to { transform: translateX(calc(100vw - var(--x, 0px) + 60px)); }
+}
+
+.balloon-sway { animation: bob 2.4s steps(2, end) infinite; }
+
+.bird { position: absolute; display: block; }
+.bird-a, .bird-b { position: absolute; left: 0; top: 0; }
+.bird-b { visibility: hidden; }
+.bird-a { animation: flap-a 0.8s steps(1, end) infinite; }
+.bird-b { animation: flap-b 0.8s steps(1, end) infinite; }
+.flock { width: 130px; height: 100px; }
+
+@keyframes flap-a { 50% { visibility: hidden; } }
+@keyframes flap-b { 0% { visibility: hidden; } 50% { visibility: visible; } }
+
+/* ---- Title sign ---- */
+.map-sign {
+  margin: 0 auto 56px;
+  max-width: 34rem;
+  padding: 20px 24px;
+  text-align: center;
+}
+
+/* ---- Trail: one stop per row ---- */
+.trail {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.stop {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: start;
+}
+
+.stop-marker {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.stop-marker svg { max-width: 100%; height: auto; }
+
+/* Dotted trail leaving the marker, down to the next stop. */
+.stop-marker::after,
+.bend::before {
+  content: "";
+  flex: 1;
+  min-height: 16px;
+  width: 6px;
+  background: repeating-linear-gradient(to bottom, var(--foreground) 0 8px, transparent 8px 16px);
+}
+.stop-marker::after { margin-top: 4px; }
+.trail > .stop:last-child .stop-marker::after { display: none; }
+
+.bend {
+  list-style: none;
+  display: flex;
+  height: 40px;
+  padding-left: 27px;
+  color: var(--foreground);
+}
+.bend::before { flex: none; min-height: 0; }
+.bend svg { display: none; }
+
+.stop-label {
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--foreground);
+  background: var(--surface);
+  border: 3px solid var(--foreground);
+  padding: 3px 6px;
+  white-space: nowrap;
+}
+
+.stop-deco { display: none; }
+
+/* Perch: scenery standing on a floating island. */
+.perch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+}
+.perch-items {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: -4px;
+}
+.stop-avatar { animation: bob 0.8s steps(2, end) infinite; }
+
+/* Start bubble: small, tail pointing at the avatar. */
+.hello {
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  justify-self: start;
+  align-self: start;
+  width: fit-content;
+  max-width: 15rem;
+  margin: 28px 0 0;
+  padding: 0.5rem 0.875rem;
+  line-height: 1.2;
+  font-size: 1.25rem;
+  background: var(--surface);
+  border: 4px solid var(--foreground);
+  box-shadow: 4px 4px 0 var(--foreground);
+}
+.hello::before,
+.hello::after {
+  content: "";
+  position: absolute;
+  background: var(--foreground);
+}
+.hello::before { left: -12px; top: calc(50% - 8px); width: 8px; height: 16px; }
+.hello::after { display: none; left: -20px; top: calc(50% - 4px); width: 8px; height: 8px; }
+
+/* ---- Level card ---- */
+.level-card {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  background: var(--surface);
+  border: 4px solid var(--tone);
+  box-shadow: 6px 6px 0 var(--tone);
+}
+
+.level-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  font-size: 1.125rem;
+  line-height: 1.2;
+  color: #fff;
+  background: var(--tone);
+  border-bottom: 4px solid var(--foreground);
+}
+.level-ribbon svg { flex: none; }
+
+.level-body { padding: 1.25rem 1.25rem 0.5rem; }
+
+.level-goals {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.level-goals li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 1.125rem;
+  line-height: 1.3;
+}
+
+.level-tick {
+  flex: none;
+  width: 1.375rem;
+  height: 1.375rem;
+  margin-top: 0.1rem;
+  display: grid;
+  place-items: center;
+  background: var(--tone);
+}
+.level-tick svg { display: block; }
+
+.level-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 1rem 1.25rem 0;
+  padding: 0.9rem 0 1.1rem;
+  border-top: 4px dotted var(--line);
+}
+
+.level-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.2rem 0.7rem;
+  border: 4px solid var(--tone);
+  color: var(--tone);
+  font-family: var(--font-display, inherit);
+  font-size: 0.9rem;
+  transform: rotate(-3deg);
+}
+
+/* ---- Desktop: zig-zag along a central trail ---- */
+@media (min-width: 640px) {
+  .map-inner { padding-inline: 24px; }
+  .level-body { padding: 1.5rem 1.75rem 0.5rem; }
+  .level-foot { margin-inline: 1.75rem; }
+  .level-ribbon { padding-inline: 1.75rem; }
+}
+
+@media (min-width: 900px) {
+  .stop {
+    grid-template-columns: minmax(0, 1fr) 120px minmax(0, 1fr);
+    column-gap: 32px;
+    align-items: center;
+  }
+  .stop-marker { grid-column: 2; }
+  .stop-left .level-card { grid-column: 1; }
+  .stop-right .level-card { grid-column: 3; }
+  .stop-deco { display: flex; grid-row: 1; justify-content: center; align-self: center; }
+  .stop-left .stop-deco { grid-column: 3; }
+  .stop-right .stop-deco,
+  .stop-start .stop-deco { grid-column: 1; }
+  .hello { grid-column: 3; align-self: center; margin-top: 0; }
+  .hello::after { display: block; }
+
+  .bend { height: 144px; padding-left: 0; justify-content: center; }
+  .bend::before { display: none; }
+  .bend svg { display: block; }
+}
+
+/* ---- Scenery details ---- */
+.windmill { position: relative; width: 80px; padding-top: 24px; }
+.windmill-blades {
+  position: absolute;
+  left: calc(50% - 37.5px);
+  top: 4px;
+  animation: spin-quarter 1.2s steps(6, end) infinite;
+}
+@keyframes spin-quarter { to { transform: rotate(90deg); } }
+
+/* Screenshot gallery inside a level card: a pixel "monitor" plus a thumbnail strip. */
+.shots {
+  margin: 1.25rem 0 0;
+}
+
+.shots-frame {
+  border: 4px solid var(--foreground);
+  background: var(--surface);
+  box-shadow: 5px 5px 0 var(--tone);
+}
+
+.shots-open {
+  display: block;
+  width: 100%;
+  padding: 0;
+  color: inherit;
+  text-align: left;
+  cursor: zoom-in;
+}
+
+.shots-open:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 7px 7px 0 var(--tone);
+}
+
+.shots-dialog {
+  width: min(96vw, 1240px);
+  max-height: 94vh;
+  margin: auto;
+  padding: 0;
+  border: 4px solid var(--foreground);
+  background: var(--background);
+  color: var(--foreground);
+  box-shadow: 8px 8px 0 var(--tone);
+}
+
+.shots-dialog::backdrop {
+  background: rgb(13 2 33 / 0.82);
+}
+
+.shots-dialog-body {
+  padding: 1rem;
+}
+
+.shots-dialog-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 3px solid var(--foreground);
+}
+
+.shots-dialog-caption {
+  margin-top: 0.8rem;
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+
+.shots-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.shots-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.5rem;
+  background: var(--tone);
+  color: var(--background);
+}
+
+.shots-bar span {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--background);
+}
+
+.shots-bar b {
+  margin-left: auto;
+  font-family: var(--theme-display), monospace;
+  font-size: 0.6rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.shots-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.shots-caption {
+  margin-top: 0.9rem;
+  font-size: 1.05rem;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.shots-thumbs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
+.shots-thumb {
+  display: block;
+  padding: 0;
+  border: 3px solid var(--foreground);
+  background: var(--surface);
+  opacity: 0.7;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.shots-thumb img {
+  width: 100%;
+  height: auto;
+}
+
+.shots-thumb:hover {
+  opacity: 1;
+}
+
+.shots-thumb[aria-pressed="true"] {
+  opacity: 1;
+  border-color: var(--tone);
+  box-shadow: 3px 3px 0 var(--tone);
+  transform: translate(-1px, -1px);
+}
+
+.shots-note {
+  margin-top: 0.7rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.shots-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.shots-tab {
+  border: 3px solid var(--foreground);
+  background: var(--surface);
+  color: var(--foreground);
+  padding: 0.35rem 0.7rem;
+  font-family: var(--theme-display), monospace;
+  font-size: 0.6rem;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.shots-tab[aria-pressed="true"] {
+  background: var(--tone);
+  color: var(--background);
+  border-color: var(--tone);
+}
+
+/* Skills and deliverables chips under a level's goals. */
+.level-stack {
+  margin-top: 1.25rem;
+}
+
+.level-stack-title {
+  font-family: var(--theme-display), monospace;
+  font-size: 0.6rem;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.level-stack ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.level-stack li {
+  border: 3px solid var(--tone);
+  background: var(--surface);
+  padding: 0.15rem 0.6rem;
+  font-size: 1.05rem;
+  line-height: 1.3;
+}

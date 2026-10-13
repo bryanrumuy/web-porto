@@ -1,32 +1,116 @@
 @import "tailwindcss";
 
-:root {
-  color-scheme: light dark;
-  --background: #f7f5ff;
-  --foreground: #17143f;
-  --surface: #ffffff;
-  --muted: #55527d;
-  --line: #ddd8f5;
-
-  --violet: #5b3df5;
-  --pink: #e0197a;
-  --cyan: #0891b2;
-  --amber: #b86200;
+/*
+ * Every page sits inside a `.theme-root` wrapper plus one `.theme-*` class.
+ * A theme only swaps tokens (colours, fonts, grid), so shared pieces like
+ * .pixel-box or .pixel-btn re-skin themselves automatically.
+ */
+.theme-root {
+  min-height: 100vh;
+  background-color: var(--background);
+  background-image:
+    linear-gradient(var(--grid) 2px, transparent 2px),
+    linear-gradient(90deg, var(--grid) 2px, transparent 2px);
+  background-size: 24px 24px;
+  color: var(--foreground);
+  font-family: var(--theme-sans), "Courier New", monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0d0b26;
-    --foreground: #f1eeff;
-    --surface: #151238;
-    --muted: #aaa6d8;
-    --line: #2a2658;
+/* Hub: warm paper, violet ink. */
+.theme-cream {
+  --background: #fdf6e3;
+  --foreground: #1b1b3a;
+  --surface: #ffffff;
+  --muted: #4a4a6a;
+  --line: #c9bfa3;
+  --grid: rgba(27, 27, 58, 0.06);
+  --violet: #6b4dff;
+  --pink: #c4175f;
+  --cyan: #0c7690;
+  --amber: #b45309;
+  --theme-display: var(--font-press-start);
+  --theme-sans: var(--font-pixelify);
+}
 
-    --violet: #8b73ff;
-    --pink: #ff5c9e;
-    --cyan: #2dd4e6;
-    --amber: #ffb547;
-  }
+/* Hub: rainy neon dusk, matching the hero scene. */
+.theme-dusk {
+  --background: #120a2e;
+  --foreground: #fff4e0;
+  --surface: #241044;
+  --muted: #e0cdf5;
+  --line: #5a2f8a;
+  --grid: rgba(255, 244, 224, 0.05);
+  --ground: #170c2e;
+  --violet: #b9a2ff;
+  --pink: #ff6fb5;
+  --cyan: #4de8f0;
+  --amber: #ffc15a;
+  --theme-display: var(--font-press-start);
+  --theme-sans: var(--font-pixelify);
+}
+
+/* About: four-shade handheld LCD olive-grey (classic DMG). */
+.theme-gameboy {
+  --background: #c4cfa1;
+  --foreground: #1f1f1f;
+  --surface: #dbe3bb;
+  --muted: #3f4630;
+  --line: #8b956d;
+  --grid: rgba(31, 31, 31, 0.1);
+  --violet: #3f4630;
+  --pink: #1f1f1f;
+  --cyan: #3f4630;
+  --amber: #1f1f1f;
+  --theme-display: var(--font-silkscreen);
+  --theme-sans: var(--font-pixelify);
+}
+
+/* Skills: torch-lit dungeon. */
+.theme-dungeon {
+  --background: #1a1423;
+  --foreground: #f2e6c9;
+  --surface: #2a2035;
+  --muted: #cbbd9f;
+  --line: #4a3b5c;
+  --grid: rgba(255, 255, 255, 0.04);
+  --violet: #b79bff;
+  --pink: #ff7a9c;
+  --cyan: #5ee0e6;
+  --amber: #ffc447;
+  --theme-display: var(--font-press-start);
+  --theme-sans: var(--font-vt323);
+}
+
+/* Projects: open-sky adventure map. */
+.theme-sky {
+  --background: #bfe6fb;
+  --foreground: #0b2a4a;
+  --surface: #ffffff;
+  --muted: #2c4f77;
+  --line: #7fb0d6;
+  --grid: rgba(11, 42, 74, 0.07);
+  --violet: #4b3fd9;
+  --pink: #b8135a;
+  --cyan: #0b6a8c;
+  --amber: #9a4309;
+  --theme-display: var(--font-silkscreen);
+  --theme-sans: var(--font-pixelify);
+}
+
+/* Contact: neon arcade cabinet. */
+.theme-arcade {
+  --background: #0d0221;
+  --foreground: #f5f0ff;
+  --surface: #1b0b3b;
+  --muted: #cdb8ff;
+  --line: #4a2a8a;
+  --grid: rgba(255, 79, 216, 0.09);
+  --violet: #a78bfa;
+  --pink: #ff4fd8;
+  --cyan: #22f0ff;
+  --amber: #ffe14d;
+  --theme-display: var(--font-press-start);
+  --theme-sans: var(--font-vt323);
 }
 
 @theme inline {
@@ -36,9 +120,9 @@
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-tone: var(--tone);
-  --font-sans: var(--font-geist-sans);
-  --font-display: var(--font-bricolage);
-  --animate-rise: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --font-sans: var(--theme-sans, var(--font-pixelify));
+  --font-display: var(--theme-display, var(--font-press-start));
+  --animate-rise: rise 0.6s steps(6, end) both;
 }
 
 .tone-violet { --tone: var(--violet); }
@@ -51,27 +135,183 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-size: 1.125rem;
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: none;
 }
 
 ::selection {
-  background: var(--violet);
-  color: #fff;
+  background: var(--foreground);
+  color: var(--background);
 }
 
 :focus-visible {
-  outline: 2px solid var(--violet);
-  outline-offset: 3px;
+  outline: 4px solid var(--pink);
+  outline-offset: 2px;
+}
+
+/* Hard-edged "8-bit" surfaces: square borders and offset shadows, no blur. */
+.pixel-box {
+  border: 4px solid var(--foreground);
+  background: var(--surface);
+  box-shadow: 6px 6px 0 var(--foreground);
+}
+
+.pixel-box-tone {
+  border: 4px solid var(--tone);
+  background: var(--surface);
+  box-shadow: 6px 6px 0 var(--tone);
+}
+
+.pixel-btn {
+  display: inline-block;
+  border: 4px solid var(--foreground);
+  background: var(--surface);
+  color: var(--foreground);
+  box-shadow: 4px 4px 0 var(--foreground);
+  padding: 0.75rem 1.25rem;
+  font-family: var(--theme-display, var(--font-press-start)), monospace;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: none;
+}
+
+.pixel-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--foreground);
+}
+
+.pixel-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--foreground);
+}
+
+.pixel-btn-solid {
+  background: var(--foreground);
+  color: var(--background);
+  box-shadow: 4px 4px 0 var(--pink);
+}
+
+.pixel-btn-solid:hover {
+  box-shadow: 6px 6px 0 var(--pink);
+}
+
+.pixel-btn-solid:active {
+  box-shadow: 0 0 0 var(--pink);
+}
+
+/* Speech bubble with a stepped "tail" built from two squares. */
+.pixel-bubble {
+  position: relative;
+  border: 4px solid var(--foreground);
+  background: var(--surface);
+  padding: 0.75rem 1rem;
+  box-shadow: 4px 4px 0 var(--foreground);
+}
+
+.pixel-bubble::before,
+.pixel-bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  background: var(--foreground);
+}
+
+.pixel-bubble::before {
+  bottom: -16px;
+  width: 16px;
+  height: 8px;
+  margin-left: -8px;
+}
+
+.pixel-bubble::after {
+  bottom: -20px;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+}
+
+/* Grass strip over dirt, the floor the avatar stands on. */
+.pixel-ground {
+  height: 36px;
+  border-top: 8px solid var(--cyan);
+  background:
+    linear-gradient(90deg, transparent 0 12px, var(--line) 12px 16px, transparent 16px 32px),
+    var(--ground, var(--foreground));
+  background-size: 32px 100%, auto;
+}
+
+.avatar-idle {
+  animation: bob 1.2s steps(1, end) infinite;
+}
+
+.avatar-jump {
+  animation: jump 0.42s steps(6, end);
+}
+
+.blink-arrow {
+  animation: blink 0.9s steps(2, start) infinite;
+}
+
+.inventory-slot {
+  border: 4px solid var(--foreground);
+  background: var(--surface);
+  box-shadow: inset -4px -4px 0 var(--line);
+  padding: 0.5rem 0.9rem;
+  font-size: 1.125rem;
+  line-height: 1.3;
+}
+
+.inventory-slot:hover {
+  background: var(--tone);
+  color: var(--background);
+  box-shadow: inset -4px -4px 0 rgb(0 0 0 / 0.25);
+}
+
+.blink-cursor::after {
+  content: "_";
+  margin-left: 0.15em;
+  animation: blink 1s steps(2, start) infinite;
 }
 
 @keyframes rise {
-  from { opacity: 0; transform: translateY(28px); }
+  from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: none; }
+}
+
+@keyframes bob {
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes jump {
+  0% { transform: translateY(0); }
+  35% { transform: translateY(-36px); }
+  65% { transform: translateY(-36px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes blink {
+  to { visibility: hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* Hub blocks: each wears the theme of the page it opens. */
+.block-card {
+  box-shadow: 8px 8px 0 var(--foreground);
+}
+
+.block-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 11px 11px 0 var(--foreground);
+}
+
+.block-card:active {
+  transform: translate(6px, 6px);
+  box-shadow: 0 0 0 var(--foreground);
 }

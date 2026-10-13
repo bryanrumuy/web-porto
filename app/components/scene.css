@@ -1,0 +1,210 @@
+/* The city hugs the bottom of the hero; the sky above is plain night. */
+/* Phones: a city strip at the bottom. Wider screens: the scene is the whole hero. */
+.hero-scene {
+  height: min(100%, 30rem);
+}
+
+@media (min-width: 768px) {
+  .hero-scene {
+    height: 100%;
+  }
+}
+
+.hero-sky {
+  background: #120a2e;
+}
+
+/* Square stars scattered over the plain sky above the city. */
+.hero-sky::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  background: transparent;
+  box-shadow:
+    8vw 6vh #fff4e0, 17vw 14vh #fff4e0, 26vw 4vh #b9a2ff, 34vw 19vh #fff4e0,
+    43vw 9vh #fff4e0, 52vw 3vh #fff4e0, 61vw 16vh #b9a2ff, 69vw 7vh #fff4e0,
+    78vw 12vh #fff4e0, 86vw 4vh #fff4e0, 93vw 18vh #b9a2ff, 12vw 24vh #fff4e0,
+    58vw 26vh #fff4e0, 90vw 30vh #fff4e0;
+  opacity: 0.8;
+}
+
+/* Hero backdrop motion: everything steps, nothing eases. */
+.scene-rain {
+  animation: scene-rain 0.6s steps(5, end) infinite;
+}
+
+@keyframes scene-rain {
+  from { transform: translate(0, 0); }
+  to { transform: translate(-6px, 30px); }
+}
+
+.scene-cloud {
+  animation: scene-drift 160s steps(160, end) infinite;
+}
+
+.scene-cloud-slow {
+  animation-duration: 240s;
+  animation-delay: -90s;
+}
+
+@keyframes scene-drift {
+  from { transform: translateX(-60px); }
+  to { transform: translateX(340px); }
+}
+
+.scene-twinkle {
+  animation: scene-twinkle 2.4s steps(2, start) infinite;
+}
+
+@keyframes scene-twinkle {
+  50% { opacity: 0.15; }
+}
+
+/* Street life. Frame flips and walking both use hard steps. */
+.scene-walker {
+  animation: scene-walk var(--dur) steps(160, end) infinite;
+  animation-delay: var(--delay);
+}
+
+.scene-walker-rev {
+  animation-direction: reverse;
+}
+
+@keyframes scene-walk {
+  from { transform: translateX(-60px); }
+  to { transform: translateX(380px); }
+}
+
+.scene-frame-a {
+  animation: scene-frame-a 0.6s steps(1, end) infinite;
+}
+
+.scene-frame-b {
+  opacity: 0;
+  animation: scene-frame-b 0.6s steps(1, end) infinite;
+}
+
+@keyframes scene-frame-a {
+  50% { opacity: 0; }
+}
+
+@keyframes scene-frame-b {
+  50% { opacity: 1; }
+}
+
+.scene-car {
+  animation: scene-drive var(--dur) steps(200, end) infinite;
+  animation-delay: var(--delay);
+}
+
+.scene-car-rev {
+  animation-direction: reverse;
+}
+
+@keyframes scene-drive {
+  from { transform: translateX(-120px); }
+  to { transform: translateX(400px); }
+}
+
+.scene-blimp {
+  animation: scene-blimp 150s steps(150, end) infinite;
+}
+
+@keyframes scene-blimp {
+  from { transform: translateX(350px); }
+  to { transform: translateX(-60px); }
+}
+
+.scene-steam {
+  animation: scene-steam 2.7s steps(9, end) infinite;
+}
+
+@keyframes scene-steam {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-18px); opacity: 0; }
+}
+
+.scene-flicker {
+  animation: scene-flicker 5s steps(1, end) infinite;
+}
+
+@keyframes scene-flicker {
+  0%, 91%, 94%, 100% { opacity: 1; }
+  92% { opacity: 0.3; }
+  93% { opacity: 0.8; }
+  95% { opacity: 0.5; }
+}
+
+/* Distant lightning: a rare, brief brightening of the whole scene. */
+.scene-flash {
+  opacity: 0;
+  animation: scene-flash 11s steps(1, end) infinite;
+}
+
+@keyframes scene-flash {
+  0%, 96%, 98%, 100% { opacity: 0; }
+  97% { opacity: 0.22; }
+  99% { opacity: 0.12; }
+}
+
+/* The sun sinks behind the horizon and the sky dims with it, then it rises again. */
+.scene-sun {
+  animation: scene-sunset 90s steps(90, end) infinite alternate;
+  animation-delay: -12s;
+}
+
+@keyframes scene-sunset {
+  from { transform: translateY(0); }
+  to { transform: translateY(48px); }
+}
+
+.scene-dim {
+  opacity: 0;
+  animation: scene-dim 90s steps(90, end) infinite alternate;
+  animation-delay: -12s;
+}
+
+@keyframes scene-dim {
+  from { opacity: 0; }
+  to { opacity: 0.45; }
+}
+
+/* Bryan on the pavement. */
+.scene-avatar {
+  cursor: pointer;
+}
+
+.scene-avatar:focus-visible {
+  outline: 2px solid #ff6fb5;
+  outline-offset: 2px;
+}
+
+.scene-avatar-idle {
+  animation: scene-bob 1.2s steps(1, end) infinite;
+}
+
+.scene-avatar-walk {
+  animation: scene-bob 0.14s steps(1, end) infinite;
+}
+
+.scene-street {
+  cursor: pointer;
+}
+
+@keyframes scene-bob {
+  50% { transform: translateY(-1px); }
+}
+
+.scene-bubble {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.scene-bubble.is-on,
+.scene-avatar:hover .scene-bubble,
+.scene-avatar:focus-visible .scene-bubble {
+  opacity: 1;
+}

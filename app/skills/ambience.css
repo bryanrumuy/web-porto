@@ -1,0 +1,87 @@
+/* Embers: a viewport-tall sticky layer, so they rise wherever you scroll. */
+.ember-layer {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  height: 100vh;
+  height: 100svh;
+  margin-bottom: -100vh;
+  margin-bottom: -100svh;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.ember {
+  position: absolute;
+  left: var(--x);
+  bottom: var(--y);
+  width: var(--s);
+  height: var(--s);
+  background: #ff9a3c;
+  animation: ember var(--d) steps(28, end) var(--dl) infinite;
+}
+
+.ember-hot { background: #fff2a8; }
+
+@keyframes ember {
+  to { transform: translate(var(--dx), -85vh); opacity: 0; }
+}
+
+/* Bat: patrols its own lane above the title. Wings flip between two frames. */
+.bat-lane {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  height: 44px;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.bat {
+  position: absolute;
+  top: 0;
+  left: 72%;
+  animation: bat-fly 28s steps(140, end) infinite;
+}
+
+.bat-bob {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  animation: bat-bob 1.6s steps(1, end) infinite;
+}
+
+.bat-bob > svg { position: absolute; inset: 0; }
+.bat-b { opacity: 0; }
+.bat-a { animation: frame-a 0.36s steps(1, end) infinite; }
+.bat-b { animation: frame-b 0.36s steps(1, end) infinite; }
+
+@keyframes bat-fly { from { left: -70px; } to { left: 100%; } }
+@keyframes bat-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+
+/* Spider: drops on a thread from the ceiling of the right rail, then climbs back. */
+.spider {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 32px;
+  height: 100px;
+  margin-left: -16px;
+  animation: spider-drop 7s steps(14, end) infinite alternate;
+}
+
+.spider-thread {
+  flex: 1;
+  width: 4px;
+  background: #a995d4;
+}
+
+.spider > svg { flex: none; }
+
+@keyframes spider-drop { to { height: 150px; } }
+

@@ -20,21 +20,25 @@ export function CopyEmail({ email }: { email: string }) {
   };
 
   const label =
-    state === "copied" ? "Copied" : state === "failed" ? "Copy failed" : "Copy";
+    state === "copied" ? "Copied" : state === "failed" ? "Failed" : "Copy";
 
   return (
-    <div className="inline-flex items-center gap-4 rounded-full border border-line py-2 pl-6 pr-2">
-      <span className="font-medium">{email}</span>
+    <div className="pixel-box inline-flex flex-wrap items-center gap-4 p-2 pl-5">
+      <span className="break-all font-medium">{email}</span>
       <button
         type="button"
         onClick={handleCopy}
-        className="cursor-pointer rounded-full bg-foreground px-5 py-2 text-sm font-semibold text-background transition-transform duration-200 hover:-translate-y-0.5"
+        className="pixel-btn pixel-btn-solid"
       >
         {label}
-        <span role="status" className="sr-only">
-          {state === "copied" ? "Email address copied" : ""}
-        </span>
       </button>
+      <span role="status" className="sr-only">
+        {state === "copied"
+          ? "Email address copied"
+          : state === "failed"
+            ? "Copy failed, select the email manually"
+            : ""}
+      </span>
     </div>
   );
 }

@@ -1,0 +1,365 @@
+/* About page: a handheld console. Spacing scale: 0.75 / 1.5 / 2rem. */
+.gb-console {
+  background: var(--muted);
+  border: 4px solid var(--foreground);
+  box-shadow: 8px 8px 0 var(--foreground);
+  padding: 0.75rem 0.75rem 1.5rem;
+  color: var(--surface);
+}
+
+.gb-bezel-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.25rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.gb-led {
+  width: 10px;
+  height: 10px;
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--foreground);
+  animation: gb-power 3s steps(1, end) infinite;
+}
+
+@keyframes gb-power {
+  0%, 92% { opacity: 1; }
+  93%, 100% { opacity: 0.45; }
+}
+
+/* LCD: dark inner bezel around the green glass. */
+.gb-lcd-frame {
+  background: var(--foreground);
+  padding: 0.75rem;
+}
+
+.gb-screen {
+  position: relative;
+  background: var(--background);
+  color: var(--foreground);
+  padding: 1rem;
+  isolation: isolate;
+}
+
+/* Scanlines never intercept input. */
+.gb-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 2px,
+    rgba(31, 31, 31, 0.06) 2px 3px
+  );
+}
+
+@media (min-width: 640px) {
+  .gb-console { padding: 1rem 1.5rem 2rem; }
+  .gb-lcd-frame { padding: 1.25rem; }
+  .gb-screen { padding: 1.5rem; }
+}
+
+.gb-hud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding-bottom: 0.75rem;
+  font-size: 0.7rem;
+}
+
+.gb-start { animation: gb-flash 1.2s steps(1, end) infinite; }
+
+@keyframes gb-flash {
+  50% { visibility: hidden; }
+}
+
+/* ---- Scene ---- */
+.gb-scene {
+  --s: 3px;
+  position: relative;
+  overflow: hidden;
+  height: calc(56 * var(--s));
+  background: #dbe3bb;
+  border: 4px solid var(--foreground);
+}
+
+@media (min-width: 640px) {
+  .gb-scene { --s: 4px; }
+}
+
+.gb-layer {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(480 * var(--s));
+  animation: gb-scroll var(--dur) steps(60, end) infinite;
+}
+
+.gb-layer svg { display: block; width: 100%; height: 100%; }
+
+@keyframes gb-scroll {
+  to { transform: translateX(calc(-240 * var(--s))); }
+}
+
+.gb-sun {
+  position: absolute;
+  top: calc(5 * var(--s));
+  right: calc(12 * var(--s));
+}
+
+.gb-sun .gb-px { width: calc(10 * var(--s)); height: calc(8 * var(--s)); display: block; }
+
+.gb-walker {
+  position: absolute;
+  left: calc(36 * var(--s));
+  bottom: calc(5 * var(--s));
+  width: calc(16 * var(--s));
+  height: calc(20 * var(--s));
+  animation: gb-bob 0.6s steps(1, end) infinite;
+}
+
+.gb-walker .gb-px {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Static state keeps frame A only, so nothing stacks without motion. */
+.gb-frame-b { opacity: 0; animation: gb-frame-b 0.6s steps(1, end) infinite; }
+.gb-frame-a { animation: gb-frame-a 0.6s steps(1, end) infinite; }
+
+@keyframes gb-frame-b { 0% { opacity: 0; } 50% { opacity: 1; } }
+@keyframes gb-frame-a { 0% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes gb-bob { 50% { transform: translateY(calc(-1 * var(--s))); } }
+
+/* ---- Layout ---- */
+.gb-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  align-items: stretch;
+}
+
+.gb-stack { display: grid; gap: 1.5rem; align-content: start; }
+
+@media (min-width: 900px) {
+  .gb-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+}
+
+/* ---- Panels ---- */
+.gb-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 4px solid var(--foreground);
+  box-shadow: 6px 6px 0 var(--foreground);
+  color: var(--foreground);
+}
+
+.gb-panel-head {
+  margin: 0;
+  background: var(--foreground);
+  color: var(--surface);
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.gb-panel-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .gb-panel-body { padding: 1.5rem; }
+}
+
+.gb-id {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+}
+
+.gb-portrait {
+  position: relative;
+  flex: none;
+  line-height: 0;
+  padding: 0.5rem;
+  background: var(--background);
+  border: 4px solid var(--foreground);
+}
+
+.gb-portrait .gb-blink { position: absolute; inset: 0.5rem; }
+
+.gb-facts { margin: 0; }
+
+.gb-fact {
+  padding: 0.75rem 0;
+  border-top: 3px dotted var(--foreground);
+}
+
+.gb-fact dd { margin: 0.25rem 0 0; }
+
+.gb-blink { animation: gb-eyes 4s steps(1, end) infinite; opacity: 0; }
+.gb-eyes-open { animation: gb-open 4s steps(1, end) infinite; }
+
+@keyframes gb-open { 0%, 94% { opacity: 1; } 95%, 100% { opacity: 0; } }
+@keyframes gb-eyes { 0%, 94% { opacity: 0; } 95%, 100% { opacity: 1; } }
+
+/* ---- Save file: a cartridge with a cut corner and contact pins ---- */
+.gb-cart {
+  position: relative;
+  background: var(--surface);
+  border: 4px solid var(--foreground);
+  box-shadow: 6px 6px 0 var(--foreground);
+  color: var(--foreground);
+}
+
+.gb-cart::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 20px;
+  height: 20px;
+  background: var(--background);
+  border-left: 4px solid var(--foreground);
+  border-bottom: 4px solid var(--foreground);
+}
+
+.gb-cart-head {
+  margin: 0;
+  background: var(--foreground);
+  color: var(--surface);
+  padding: 0.5rem 1rem;
+  padding-right: 2.5rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.gb-cart-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin: 1rem;
+  padding: 1rem;
+  border: 3px dashed var(--foreground);
+}
+
+.gb-cart-icon { flex: none; line-height: 0; }
+
+.gb-cart-body > div:last-child {
+  display: grid;
+  flex: 1 1 14rem;
+  gap: 0.75rem;
+}
+
+.gb-chip {
+  justify-self: start;
+  margin: 0;
+  background: var(--foreground);
+  color: var(--surface);
+  padding: 0.35rem 0.6rem;
+  font-size: 0.7rem;
+}
+
+.gb-pins {
+  height: 14px;
+  background: repeating-linear-gradient(
+    to right,
+    var(--foreground) 0 6px,
+    transparent 6px 12px
+  );
+  border-top: 4px solid var(--foreground);
+}
+
+/* ---- Console controls ---- */
+.gb-controls {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: "dpad . ab" "pills . speaker";
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding: 0 0.5rem;
+}
+
+.gb-dpad {
+  grid-area: dpad;
+  position: relative;
+  width: 72px;
+  height: 72px;
+  filter:
+    drop-shadow(3px 0 0 #8b956d) drop-shadow(-3px 0 0 #8b956d)
+    drop-shadow(0 3px 0 #8b956d) drop-shadow(0 -3px 0 #8b956d);
+}
+
+.gb-dpad-h, .gb-dpad-v, .gb-dpad-dot { position: absolute; background: #1f1f1f; }
+.gb-dpad-h { left: 0; top: 24px; width: 72px; height: 24px; }
+.gb-dpad-v { left: 24px; top: 0; width: 24px; height: 72px; }
+.gb-dpad-dot { left: 30px; top: 30px; width: 12px; height: 12px; background: #4d533c; }
+
+.gb-ab {
+  grid-area: ab;
+  display: flex;
+  gap: 1rem;
+  transform: rotate(-20deg);
+}
+
+.gb-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  background: #8b956d;
+  border: 4px solid #1f1f1f;
+  border-radius: 50%;
+  color: #1f1f1f;
+  font-family: var(--font-display, inherit);
+  font-size: 0.7rem;
+}
+
+.gb-btn-a { margin-top: -1rem; }
+
+.gb-pills {
+  grid-area: pills;
+  display: flex;
+  gap: 0.75rem;
+  transform: rotate(-20deg);
+}
+
+.gb-pill {
+  width: 36px;
+  height: 10px;
+  background: #8b956d;
+  border: 3px solid #1f1f1f;
+  border-radius: 6px;
+}
+
+.gb-speaker {
+  grid-area: speaker;
+  display: flex;
+  gap: 8px;
+  justify-self: end;
+}
+
+.gb-speaker span {
+  width: 8px;
+  height: 40px;
+  background: #1f1f1f;
+  transform: rotate(-20deg);
+}
+
+@media (min-width: 640px) {
+  .gb-controls { padding: 0 1.5rem; }
+  .gb-speaker span { height: 52px; }
+}

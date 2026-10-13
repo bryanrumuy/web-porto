@@ -1,225 +1,88 @@
-import type { ReactNode } from "react";
-import { ClusterField } from "./components/ClusterField";
-import { CopyEmail } from "./components/CopyEmail";
+import { HeroScene } from "./components/HeroScene";
+import { STAGES } from "./components/PageShell";
+import { PixelSprite } from "./components/PixelSprite";
+import { HEART } from "./components/sprites";
+import { WorldMap, type WorldNode } from "./components/WorldMap";
+import { WorldTerrain } from "./components/WorldTerrain";
 import { education, profile, projects, skills } from "./data";
 
-const NAV = [
-  { href: "#about", label: "About" },
-  { href: "#skills", label: "Skills" },
-  { href: "#projects", label: "Projects" },
-  { href: "#contact", label: "Contact" },
-] as const;
+const LIVES = 3;
 
-const BUTTON_BASE =
-  "inline-block rounded-full px-7 py-3.5 text-sm font-semibold transition-transform duration-200 hover:-translate-y-0.5";
+const TEASERS: Record<(typeof STAGES)[number]["href"], string> = {
+  "/about": `${education.school}, ${education.period}`,
+  "/skills": skills.map((skill) => skill.group).join(", "),
+  "/projects": projects.map((project) => project.title).join(", "),
+  "/contact": profile.seeking,
+};
 
-function Section({
-  id,
-  title,
-  children,
-}: {
-  id: string;
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <section
-      id={id}
-      aria-labelledby={`${id}-title`}
-      className="mx-auto grid max-w-6xl scroll-mt-8 gap-8 px-6 py-14 lg:grid-cols-3 lg:gap-12"
-    >
-      <h2
-        id={`${id}-title`}
-        className="font-display text-3xl font-bold tracking-tight sm:text-4xl"
-      >
-        {title}
-      </h2>
-      <div className="max-w-2xl lg:col-span-2">{children}</div>
-    </section>
-  );
-}
+const NODES: readonly WorldNode[] = STAGES.map((stage) => ({
+  ...stage,
+  teaser: TEASERS[stage.href],
+}));
 
 export default function Home() {
   return (
-    <>
-      <header className="absolute inset-x-0 top-0 z-10">
-        <nav
-          aria-label="Main navigation"
-          className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6"
-        >
-          <a
-            href="#"
-            aria-label="Back to top"
-            className="font-display text-lg font-bold"
-          >
-            Portfolio
-          </a>
-          <ul className="flex gap-7 text-sm font-medium text-muted">
-            {NAV.map((item) => (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  className="transition-colors hover:text-foreground"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </header>
-
+    <div className="theme-root theme-dusk flex flex-col">
       <main className="flex-1">
-        <section className="relative flex min-h-[min(100svh,44rem)] items-center overflow-hidden">
-          <ClusterField />
-          <div className="relative mx-auto w-full max-w-6xl px-6 pb-12 pt-28">
-            <h1
-              className="animate-rise -ml-[0.055em] font-display text-5xl font-extrabold leading-none tracking-tight sm:text-6xl lg:text-7xl"
-              style={{ animationDelay: "80ms" }}
-            >
-              {profile.name}
-            </h1>
-            <p
-              className="animate-rise tone-violet -ml-[0.04em] mt-4 font-display text-xl font-semibold text-tone sm:text-2xl"
-              style={{ animationDelay: "200ms" }}
-            >
-              {profile.role}
-            </p>
-            <p
-              className="animate-rise mt-6 max-w-xl text-lg leading-relaxed text-muted"
-              style={{ animationDelay: "320ms" }}
-            >
-              {profile.tagline}
-            </p>
-            <div
-              className="animate-rise mt-8 flex flex-wrap gap-3"
-              style={{ animationDelay: "440ms" }}
-            >
-              <a
-                href="#projects"
-                className={`${BUTTON_BASE} bg-foreground text-background`}
+        <section className="hero-sky relative flex min-h-[max(44rem,100svh)] items-start overflow-hidden">
+          <HeroScene />
+          <div className="relative mx-auto grid w-full max-w-6xl gap-10 px-6 pointer-events-none pt-24 pb-[clamp(11rem,30vw,22rem)]">
+            <div className="pointer-events-auto">
+              <p className="animate-rise mb-8 flex items-center gap-3 font-display text-xs sm:text-sm">
+                <span aria-hidden className="flex gap-1">
+                  {Array.from({ length: LIVES }, (_, i) => (
+                    <PixelSprite key={i} sprite={HEART} scale={3} />
+                  ))}
+                </span>
+                Portfolio
+              </p>
+              <h1
+                className="animate-rise font-display text-2xl leading-tight sm:text-5xl lg:text-6xl"
+                style={{ animationDelay: "80ms" }}
               >
-                See my projects
-              </a>
-              <a
-                href="#contact"
-                className={`${BUTTON_BASE} border border-line bg-background/60 backdrop-blur`}
+                {profile.name}
+              </h1>
+              <p
+                className="animate-rise tone-violet mt-5 text-xl font-bold text-tone sm:text-2xl"
+                style={{ animationDelay: "200ms" }}
               >
-                Contact me
-              </a>
+                {profile.role}
+              </p>
+              <p
+                className="animate-rise blink-cursor mt-6 max-w-xl text-xl leading-relaxed text-muted"
+                style={{ animationDelay: "320ms" }}
+              >
+                {profile.tagline}
+              </p>
             </div>
-            <dl
-              className="animate-rise mt-14 grid max-w-2xl gap-6 border-t border-line pt-6 sm:grid-cols-3"
-              style={{ animationDelay: "560ms" }}
-            >
-              {profile.facts.map((fact) => (
-                <div key={fact.label}>
-                  <dt className="text-sm text-muted">{fact.label}</dt>
-                  <dd className="mt-1 font-medium">{fact.value}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
+          <p className="pointer-events-none absolute inset-x-0 bottom-4 px-6 text-center text-base text-muted [text-shadow:0_2px_0_#120a2e]">
+            Click the street or press the left and right arrow keys to walk
+            Bryan around.
+          </p>
         </section>
 
-        <Section id="about" title="About">
-          <p className="text-justify text-lg leading-relaxed hyphens-auto">
-            {profile.summary}
+        <section
+          aria-labelledby="blocks-title"
+          className="mx-auto max-w-6xl px-6 pb-20"
+        >
+          <h2 id="blocks-title" className="font-display text-lg sm:text-xl">
+            <span aria-hidden className="mr-3 text-pink">
+              &gt;
+            </span>
+            World map
+          </h2>
+          <p className="mb-8 mt-3 max-w-xl text-lg text-muted">
+            Walk to a block and open it. Each one has its own look, and every
+            block you visit levels you up.
           </p>
-          <div className="mt-8 border-t border-line pt-6">
-            <h3 className="font-semibold">{education.school}</h3>
-            <p className="mt-1 text-sm text-muted">{education.period}</p>
-            <p className="mt-3 text-muted">{education.degree}</p>
-          </div>
-        </Section>
-
-        <Section id="skills" title="Skills">
-          <div className="space-y-8">
-            {skills.map((skill) => (
-              <div key={skill.group} className={`tone-${skill.tone}`}>
-                <h3 className="flex items-center gap-3 font-semibold">
-                  <span aria-hidden className="size-3 rounded-full bg-tone" />
-                  {skill.group}
-                </h3>
-                <ul className="mt-4 flex flex-wrap gap-2.5">
-                  {skill.items.map((item) => (
-                    <li
-                      key={item}
-                      className="rounded-full border border-tone/40 bg-tone/10 px-4 py-1.5 text-base transition-colors duration-200 hover:bg-tone/25"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        <Section id="projects" title="Projects">
-          <div className="space-y-6">
-            {projects.map((project) => (
-              <article
-                key={project.title}
-                className={`tone-${project.tone} rounded-3xl bg-tone/10 p-7 sm:p-9`}
-              >
-                <p className="text-sm text-muted">{project.context}</p>
-                <h3 className="mt-2 font-display text-2xl font-bold text-tone">
-                  {project.title}
-                </h3>
-                <p className="mt-4 max-w-xl text-muted">
-                  {project.description}
-                </p>
-                <ul className="mt-6 space-y-3">
-                  {project.points.map((point) => (
-                    <li
-                      key={point}
-                      className="flex gap-3 border-t border-tone/30 pt-3"
-                    >
-                      <span
-                        aria-hidden
-                        className="mt-2 size-2 shrink-0 rounded-full bg-tone"
-                      />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </Section>
-
-        <Section id="contact" title="Contact">
-          <p className="max-w-xl text-lg sm:text-xl">{profile.seeking}</p>
-          <div className="mt-8">
-            <CopyEmail email={profile.email} />
-          </div>
-          <ul className="mt-4 flex flex-wrap gap-3">
-            <li>
-              <a
-                href={`mailto:${profile.email}`}
-                className={`${BUTTON_BASE} border border-line`}
-              >
-                Open mail app
-              </a>
-            </li>
-            <li>
-              <a
-                href={profile.linkedinHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${BUTTON_BASE} border border-line`}
-              >
-                LinkedIn
-              </a>
-            </li>
-          </ul>
-        </Section>
+          <WorldMap nodes={NODES} terrain={<WorldTerrain />} />
+        </section>
       </main>
 
-      <footer className="border-t border-line py-6 text-center text-sm text-muted">
+      <footer className="border-t-4 border-dashed border-line py-6 text-center text-base text-muted">
         {profile.name}, {profile.location}
       </footer>
-    </>
+    </div>
   );
 }

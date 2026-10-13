@@ -1,0 +1,369 @@
+/* Skills page: a torch-lit dungeon hall. Brick wall, sticky torches, chests that open. */
+
+/* Wall: 96x48 brick tile (mortar + 7 bricks), doubled so each pixel reads chunky. */
+.dungeon {
+  --mortar: #150f1d;
+  --stone: #2a2035;
+  --iron: #0d0912;
+  position: relative;
+  overflow: clip;
+  background-color: var(--mortar);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='48' shape-rendering='crispEdges'%3E%3Crect width='96' height='48' fill='%23150f1d'/%3E%3Crect x='1' y='1' width='46' height='14' fill='%232d2139'/%3E%3Crect x='49' y='1' width='46' height='14' fill='%2334273f'/%3E%3Crect x='-23' y='17' width='46' height='14' fill='%2331243c'/%3E%3Crect x='25' y='17' width='46' height='14' fill='%232a1f36'/%3E%3Crect x='73' y='17' width='46' height='14' fill='%232d2139'/%3E%3Crect x='1' y='33' width='46' height='14' fill='%232a1f36'/%3E%3Crect x='49' y='33' width='46' height='14' fill='%2331243c'/%3E%3C/svg%3E");
+  background-size: 192px 96px;
+  image-rendering: pixelated;
+}
+
+/* Vignette: darker edges so the torchlight is the brightest thing in the room. */
+.dungeon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgb(10 6 16 / 0.7), transparent 16%, transparent 84%, rgb(10 6 16 / 0.7)),
+    linear-gradient(transparent 70%, rgb(10 6 16 / 0.6));
+}
+
+.dungeon-hall,
+.dungeon-body {
+  position: relative;
+  z-index: 1;
+}
+
+/* Torches: flame frames swap with steps(); the glow lives on the torch itself. */
+.torch {
+  position: relative;
+  isolation: isolate;
+  width: 64px;
+  height: 112px;
+  flex: none;
+}
+
+.torch::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 30%;
+  width: 320px;
+  height: 320px;
+  margin: -160px 0 0 -160px;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgb(255 160 60 / 0.42) 0%,
+    rgb(255 120 40 / 0.18) 38%,
+    transparent 68%
+  );
+  animation: torch-glow 0.9s steps(3, end) infinite;
+}
+
+.torch > svg { position: absolute; inset: 0; }
+.torch-frame-b { opacity: 0; }
+.torch-frame-a { animation: frame-a 0.5s steps(1, end) infinite; }
+.torch-frame-b { animation: frame-b 0.5s steps(1, end) infinite; }
+.torch-right .torch-frame-a,
+.torch-right .torch-frame-b { animation-delay: -0.17s; }
+
+@keyframes frame-a { 0%, 49.9% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes frame-b { 0%, 49.9% { opacity: 0; } 50%, 100% { opacity: 1; } }
+@keyframes torch-glow { 0%, 100% { opacity: 1; } 33% { opacity: 0.78; } 66% { opacity: 0.9; } }
+
+/* Hall: the title plaque between two torches. */
+.dungeon-hall {
+  isolation: isolate;
+  border-bottom: 8px solid var(--iron);
+}
+
+.hall-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 4.25rem 1rem 2.5rem;
+}
+
+@media (min-width: 640px) {
+  .hall-row { gap: 2rem; padding-inline: 1.5rem; }
+}
+
+@media (max-width: 479px) {
+  .hall-row .torch { display: none; }
+}
+
+.sign-plate {
+  min-width: 0;
+  flex: 0 1 32rem;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  border: 4px solid var(--amber);
+  background: rgb(26 20 35 / 0.94);
+  box-shadow: 6px 6px 0 var(--iron), inset 0 0 0 8px rgb(255 196 71 / 0.1);
+}
+
+@media (min-width: 640px) {
+  .sign-plate { padding: 1.75rem 2rem; }
+}
+
+/* Body: chest row flanked by torch rails (rails only when there is room). */
+.dungeon-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 3rem 1rem 4rem;
+}
+
+.rail { display: none; }
+
+@media (min-width: 1280px) {
+  .dungeon-body {
+    grid-template-columns: 7rem minmax(0, 1fr) 7rem;
+    padding-inline: 0;
+  }
+
+  .rail {
+    position: relative;
+    isolation: isolate;
+    display: block;
+    overflow: clip;
+  }
+
+  .rail-torch {
+    position: sticky;
+    top: 30vh;
+    width: 64px;
+    margin: 11rem auto 0;
+  }
+}
+
+/* Chests */
+.chest-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem 1.5rem;
+  width: 100%;
+  max-width: 34rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+  .chest-row { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: none; }
+}
+
+.chest {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+/* Hanging sign: iron beam, two chains, wooden plank with a tone-coloured edge. */
+.hang {
+  position: relative;
+  padding-top: 32px;
+}
+
+.hang::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: #4a2f18;
+  border: 4px solid var(--iron);
+  border-bottom-width: 4px;
+}
+
+.hang-chain {
+  position: absolute;
+  top: 12px;
+  width: 6px;
+  height: 24px;
+  background: repeating-linear-gradient(#a8a5bd 0 6px, transparent 6px 10px);
+}
+
+.hang-chain-left { left: 18%; }
+.hang-chain-right { right: 18%; }
+
+.plank {
+  position: relative;
+  display: flex;
+  min-height: 7.5rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  text-align: center;
+  color: #fdf1d6;
+  border: 4px solid #2b1a0c;
+  border-bottom-color: var(--tone);
+  background:
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.14) 0 4px, transparent 4px 14px),
+    #6b4423;
+  box-shadow: 4px 4px 0 var(--iron);
+}
+
+.plank-count {
+  margin-top: 0.25rem;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  color: #f1dfb8;
+}
+
+/* Chest stage: closed and open frames share one box, so opening is a frame swap. */
+.chest-art {
+  position: relative;
+  height: 8.5rem;
+  margin-top: 0.75rem;
+  overflow: clip;
+}
+
+.chest-art::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 10.5rem;
+  height: 8px;
+  margin-left: -5.25rem;
+  background: #4a3b5c;
+  box-shadow: 0 -4px 0 #3b2f4d;
+}
+
+.chest-art > svg {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  margin-left: -64px;
+}
+
+.chest-open { opacity: 0; }
+
+.chest-glow {
+  position: absolute;
+  left: 50%;
+  bottom: -40px;
+  width: 240px;
+  height: 200px;
+  margin-left: -120px;
+  opacity: 0;
+  background: radial-gradient(
+    ellipse at 50% 60%,
+    rgb(255 214 110 / 0.6) 0%,
+    rgb(255 180 60 / 0.22) 45%,
+    transparent 70%
+  );
+}
+
+.spark {
+  position: absolute;
+  bottom: 56px;
+  width: 4px;
+  height: 4px;
+  background: #fff2a8;
+  opacity: 0;
+}
+
+.spark-1 { left: 45%; }
+.spark-2 { left: 51%; animation-delay: 0.3s; }
+.spark-3 { left: 57%; animation-delay: 0.6s; }
+
+.chest:hover .chest-closed,
+.chest:focus-within .chest-closed { opacity: 0; }
+
+.chest:hover .chest-open,
+.chest:focus-within .chest-open { opacity: 1; }
+
+.chest:hover .chest-glow,
+.chest:focus-within .chest-glow { opacity: 1; }
+
+.chest:hover .spark,
+.chest:focus-within .spark {
+  animation: spark 1.2s steps(6, end) infinite;
+}
+
+.chest:hover .spark-2,
+.chest:focus-within .spark-2 { animation-delay: 0.3s; }
+.chest:hover .spark-3,
+.chest:focus-within .spark-3 { animation-delay: 0.6s; }
+
+@keyframes spark {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-48px); opacity: 0; }
+}
+
+/* Inventory: always readable; the open chest only lights it up. */
+.slots {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 1rem;
+  list-style: none;
+  border: 4px solid var(--tone);
+  background: #211a2c;
+  box-shadow: 6px 6px 0 var(--iron);
+}
+
+.chest:hover .slots,
+.chest:focus-within .slots {
+  background: linear-gradient(
+    color-mix(in srgb, var(--tone) 24%, #211a2c),
+    #211a2c 110px
+  );
+}
+
+.slot {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 1.4rem;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+  cursor: default;
+  color: var(--foreground);
+  border: 4px solid #4a3b5c;
+  background: var(--stone);
+  box-shadow: inset -4px -4px 0 rgb(0 0 0 / 0.35);
+}
+
+.slot::before {
+  content: "";
+  flex: none;
+  width: 12px;
+  height: 12px;
+  background: var(--tone);
+  box-shadow: inset 3px 3px 0 rgb(255 255 255 / 0.45);
+}
+
+.slot:hover,
+.slot:focus {
+  color: #1a1423;
+  background: var(--tone);
+  border-color: var(--tone);
+}
+
+.slot:hover::before,
+.slot:focus::before {
+  background: #1a1423;
+  box-shadow: none;
+}
+
+.slot:focus-visible {
+  outline: 4px solid var(--foreground);
+  outline-offset: 2px;
+}
+
+.dungeon-floor {
+  position: relative;
+  z-index: 1;
+  height: 2rem;
+  border-top: 8px solid var(--iron);
+  background: repeating-linear-gradient(90deg, var(--stone) 0 28px, var(--iron) 28px 32px);
+}
