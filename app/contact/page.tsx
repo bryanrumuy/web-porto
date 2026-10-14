@@ -37,7 +37,9 @@ export default function ContactPage() {
         <CoinCabinet>
           <div className="cab-marquee">
             <h1 className="cab-title">Contact Bryan</h1>
-            <p className="cab-sub">Insert a message to start the conversation.</p>
+            <p className="cab-sub">
+              Insert a message to start the conversation.
+            </p>
           </div>
 
           <div className="cab-screen">
@@ -63,6 +65,20 @@ export default function ContactPage() {
                   </dd>
                 </div>
                 <div className="cab-row">
+                  <dt>GitHub</dt>
+                  <dd>
+                    <a
+                      href={profile.githubHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cab-link"
+                    >
+                      github.com/bryanrumuy
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  </dd>
+                </div>
+                <div className="cab-row">
                   <dt>Based in</dt>
                   <dd>{profile.location}</dd>
                 </div>
@@ -71,7 +87,11 @@ export default function ContactPage() {
           </div>
 
           <div className="cab-deck">
-            <a href={`mailto:${profile.email}`} data-coin className="arcade-btn cab-a">
+            <a
+              href={`mailto:${profile.email}`}
+              data-coin
+              className="arcade-btn cab-a"
+            >
               Open mail app
             </a>
             <PixelSprite sprite={JOYSTICK} scale={5} className="cab-stick" />

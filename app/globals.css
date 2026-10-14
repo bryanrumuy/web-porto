@@ -315,3 +315,31 @@ body {
   transform: translate(6px, 6px);
   box-shadow: 0 0 0 var(--foreground);
 }
+
+/* Pixel wipe that plays when a page opens after the first load (see app/template.tsx). */
+.page-wipe {
+  display: none;
+}
+
+html[data-nav="1"] .page-wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: block;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.05) 0 4px, transparent 4px 8px),
+    #120a2e;
+  animation: page-wipe 0.5s steps(10, end) forwards;
+}
+
+@keyframes page-wipe {
+  from { clip-path: inset(0 0 0 0); }
+  to { clip-path: inset(0 0 100% 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-nav="1"] .page-wipe {
+    display: none;
+  }
+}

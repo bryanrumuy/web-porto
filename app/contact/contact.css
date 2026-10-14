@@ -322,3 +322,15 @@
   .inv-b { opacity: 0 !important; }
   .inv-a { opacity: 1 !important; }
 }
+
+/* Links inside the high-score panel. */
+.cab-link {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+}
+
+.cab-link:hover {
+  color: var(--amber);
+}

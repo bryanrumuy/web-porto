@@ -119,6 +119,7 @@ export function SceneAvatar({
     undefined,
   );
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const greetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isVisibleRef = useRef(true);
   const [x, setX] = useState(startX);
   const [facing, setFacing] = useState<1 | -1>(1);
@@ -155,7 +156,8 @@ export function SceneAvatar({
 
   const greet = () => {
     setIsGreeting(true);
-    timers.current.push(setTimeout(() => setIsGreeting(false), GREETING_MS));
+    if (greetTimer.current) clearTimeout(greetTimer.current);
+    greetTimer.current = setTimeout(() => setIsGreeting(false), GREETING_MS);
   };
 
   useEffect(() => {
@@ -175,6 +177,14 @@ export function SceneAvatar({
 
     const onKeyDown = (event: globalThis.KeyboardEvent) => {
       if (!isVisibleRef.current || isTypingTarget(event.target)) return;
+      const target = event.target;
+      if (
+        target instanceof Element &&
+        target !== document.body &&
+        target !== document.documentElement &&
+        !target.closest(".scene-avatar")
+      )
+        return;
       if (event.ctrlKey || event.metaKey || event.altKey) return;
       const key = event.key.toLowerCase();
       const direction =
@@ -193,6 +203,7 @@ export function SceneAvatar({
       clearInterval(blink);
       clearInterval(walkTimer.current);
       pending.forEach(clearTimeout);
+      if (greetTimer.current) clearTimeout(greetTimer.current);
       observer.disconnect();
       window.removeEventListener("keydown", onKeyDown);
     };
@@ -245,7 +256,7 @@ export function SceneAvatar({
         className="scene-avatar"
         role="button"
         tabIndex={0}
-        aria-label="Bryan Rumuy, say hello. Use the left and right arrow keys to walk."
+        aria-label="Hi, I'm Bryan. Say hello. Left and right arrow keys walk."
         onClick={greet}
         onKeyDown={handleKeyDown}
         transform={`translate(${x} ${feet - SPRITE_HEIGHT})`}

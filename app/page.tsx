@@ -1,6 +1,7 @@
 import { HeroScene } from "./components/HeroScene";
 import { STAGES } from "./components/PageShell";
 import { PixelSprite } from "./components/PixelSprite";
+import { TitleScreen } from "./components/TitleScreen";
 import { HEART } from "./components/sprites";
 import { WorldMap, type WorldNode } from "./components/WorldMap";
 import { WorldTerrain } from "./components/WorldTerrain";
@@ -23,6 +24,7 @@ const NODES: readonly WorldNode[] = STAGES.map((stage) => ({
 export default function Home() {
   return (
     <div className="theme-root theme-dusk flex flex-col">
+      <TitleScreen name={profile.name} />
       <main className="flex-1">
         <section className="hero-sky relative flex min-h-[max(44rem,100svh)] items-start overflow-hidden">
           <HeroScene />

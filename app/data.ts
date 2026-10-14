@@ -16,6 +16,7 @@ export const profile = {
   location: "Surabaya, Indonesia",
   email: "rumuybryan@gmail.com",
   linkedinHref: "https://www.linkedin.com/in/bryanrumuy",
+  githubHref: "https://github.com/bryanrumuy",
   summary:
     "Informatics Engineering graduate from Universitas Surabaya, specializing in Data Science and Artificial Intelligence. I design and build full-stack systems, from database design and workflow implementation to testing, and apply machine learning where it solves a real problem.",
   seeking: "Open to roles in data science, web development and AI automation.",
@@ -60,7 +61,7 @@ export const projects = [
   },
   {
     title: "Blockchain WFH Activity Monitoring System",
-    context: "Hyperledger Fabric, Node.js, PHP",
+    context: "University course project",
     tone: "cyan",
     description:
       "A blockchain-based WFH activity monitoring system built on Hyperledger Fabric. Employee activities are recorded as immutable transactions on a distributed ledger, ensuring data integrity and transparency.",
@@ -121,9 +122,6 @@ export const skills = [
     tone: "amber",
     items: [
       "MySQL",
-      "Hyperledger Fabric",
-      "Blockchain",
-      "gRPC",
       "Role-based Access Control",
       "Two-factor Authentication",
       "Git & GitHub",

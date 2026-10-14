@@ -30,10 +30,27 @@ const vt323 = VT323({
   weight: "400",
 });
 
+const SITE_URL = "https://bryanrumuy-porto.vercel.app";
+const SITE_TITLE = "Bryan Rumuy | Data Scientist, Web Developer, AI Automation";
+const SITE_DESCRIPTION =
+  "Portfolio of Bryan Rumuy: data science, web development and AI automation. Based in Surabaya.";
+
 export const metadata: Metadata = {
-  title: "Bryan Rumuy | Data Scientist, Web Developer, AI Automation",
-  description:
-    "Portfolio of Bryan Rumuy: data science, web development and AI automation. Based in Surabaya.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: "./" },
+  openGraph: {
+    type: "website",
+    siteName: "Bryan Rumuy",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

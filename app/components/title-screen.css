@@ -1,0 +1,111 @@
+/* Title screen shown once per browser session before the hub. */
+.title-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #120a2e;
+  color: #fff4e0;
+  font-family: var(--font-pixelify), monospace;
+}
+
+.title-stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  box-shadow:
+    8vw 8vh #fff4e0,
+    17vw 20vh #fff4e0,
+    26vw 6vh #b9a2ff,
+    34vw 28vh #fff4e0,
+    43vw 12vh #fff4e0,
+    52vw 5vh #fff4e0,
+    61vw 24vh #b9a2ff,
+    69vw 10vh #fff4e0,
+    78vw 18vh #fff4e0,
+    86vw 6vh #fff4e0,
+    93vw 26vh #b9a2ff,
+    12vw 40vh #fff4e0,
+    58vw 44vh #fff4e0,
+    90vw 50vh #fff4e0,
+    24vw 62vh #b9a2ff,
+    74vw 70vh #fff4e0;
+  animation: title-twinkle 2.4s steps(2, start) infinite;
+}
+
+.title-rain {
+  position: absolute;
+  inset: -30px 0 0;
+  /* Thin columns every 37px, cut into 14px dashes every 30px. */
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 34px,
+    rgb(207 227 255 / 0.35) 34px 37px
+  );
+  mask-image: repeating-linear-gradient(
+    to bottom,
+    #000 0 14px,
+    transparent 14px 30px
+  );
+  animation: title-rain 0.6s steps(5, end) infinite;
+}
+
+.title-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.title-avatar {
+  animation: title-bob 1.2s steps(1, end) infinite;
+}
+
+.title-kicker {
+  font-family: var(--font-press-start), monospace;
+  font-size: 0.8rem;
+  color: #b9a2ff;
+}
+
+.title-name {
+  font-family: var(--font-press-start), monospace;
+  font-size: clamp(1.4rem, 6vw, 3rem);
+  line-height: 1.2;
+}
+
+.title-start {
+  margin-top: 0.8rem;
+}
+
+.title-hint {
+  font-size: 1.05rem;
+  color: #e0cdf5;
+}
+
+@keyframes title-twinkle {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes title-bob {
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes title-rain {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(30px);
+  }
+}
