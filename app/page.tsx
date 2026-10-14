@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { HeroScene } from "./components/HeroScene";
 import { STAGES } from "./components/PageShell";
 import { PixelSprite } from "./components/PixelSprite";
@@ -54,6 +55,17 @@ export default function Home() {
               >
                 {profile.tagline}
               </p>
+              <div
+                className="animate-rise mt-8 flex flex-wrap gap-4"
+                style={{ animationDelay: "440ms" }}
+              >
+                <Link href="/projects" className="pixel-btn pixel-btn-solid">
+                  View projects
+                </Link>
+                <Link href="/contact" className="pixel-btn">
+                  Contact me
+                </Link>
+              </div>
             </div>
           </div>
           <p className="pointer-events-none absolute inset-x-0 bottom-4 px-6 text-center text-base text-muted [text-shadow:0_2px_0_#120a2e]">
