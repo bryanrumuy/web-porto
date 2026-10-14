@@ -444,6 +444,11 @@ export const projectShots: Readonly<
   ],
 };
 
+// Public links per project, keyed by title. Add "code" (a GitHub repository) or "demo" (a live
+// page or video) when it exists: the buttons appear on the project card by themselves.
+export type ProjectLinks = { code?: string; demo?: string };
+export const projectLinks: Readonly<Record<string, ProjectLinks>> = {};
+
 // Skills and deliverables per project, shown as chips under the goals.
 export const projectStacks: Readonly<Record<string, readonly string[]>> = {
   "Alter: AI Customer-Service Assistant": [

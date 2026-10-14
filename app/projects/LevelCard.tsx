@@ -1,6 +1,11 @@
 import { PixelSprite } from "../components/PixelSprite";
 import { COIN, STAR } from "../components/sprites";
-import { projectShots, projectStacks, type projects } from "../data";
+import {
+  projectLinks,
+  projectShots,
+  projectStacks,
+  type projects,
+} from "../data";
 import { CHECK } from "./art";
 import { ShotGallery } from "./ShotGallery";
 
@@ -21,6 +26,7 @@ export function LevelCard({ project, id }: { project: Project; id: string }) {
   const total = project.points.length;
   const shots = projectShots[project.title];
   const stack = projectStacks[project.title];
+  const links = projectLinks[project.title];
   return (
     <article aria-labelledby={id} className={`level-card tone-${project.tone}`}>
       <p className="level-ribbon">
@@ -56,6 +62,31 @@ export function LevelCard({ project, id }: { project: Project; id: string }) {
             );
           })}
         </ul>
+
+        {(links?.code || links?.demo) && (
+          <p className="mt-5 flex flex-wrap gap-3">
+            {links.code && (
+              <a
+                href={links.code}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pixel-btn pixel-btn-solid"
+              >
+                View code
+              </a>
+            )}
+            {links.demo && (
+              <a
+                href={links.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pixel-btn"
+              >
+                Watch demo
+              </a>
+            )}
+          </p>
+        )}
 
         {stack && (
           <section aria-label="Skills and deliverables" className="level-stack">
