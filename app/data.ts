@@ -77,7 +77,7 @@ export const projects = [
   },
   {
     title: "Blockchain WFH Activity Monitoring System",
-    context: "University course project",
+    context: "University group course project",
     tone: "cyan",
     description:
       "A blockchain-based WFH activity monitoring system built on Hyperledger Fabric. Employee activities are recorded as immutable transactions on a distributed ledger, ensuring data integrity and transparency.",
@@ -450,6 +450,9 @@ export type ProjectLinks = { code?: string; demo?: string };
 export const projectLinks: Readonly<Record<string, ProjectLinks>> = {
   "Alter: AI Customer-Service Assistant": {
     code: "https://github.com/bryanrumuy/alter-ai-assistant",
+  },
+  "Blockchain WFH Activity Monitoring System": {
+    code: "https://github.com/bryanrumuy/blockchain-wfh-monitoring",
   },
 };
 
