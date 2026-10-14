@@ -7,7 +7,7 @@ import { projects } from "../data";
 import { CASTLE, FLAG, TOWER, TREE } from "./art";
 import { Backdrop } from "./Backdrop";
 import { LevelCard } from "./LevelCard";
-import { Bend, Deco, Perch } from "./Scenery";
+import { Bend, Deco, Marker, Perch } from "./Scenery";
 import "./projects.css";
 
 export const metadata: Metadata = { title: "Projects | Bryan Rumuy" };
@@ -54,16 +54,13 @@ export default function ProjectsPage() {
               const marker = MARKERS[index % MARKERS.length];
               return (
                 <Fragment key={project.title}>
-                  <Bend />
+                  <Bend index={index} />
                   <li
                     className={`stop ${index % 2 === 0 ? "stop-left" : "stop-right"}`}
                   >
                     <div className="stop-marker">
                       <Perch>
-                        <PixelSprite
-                          sprite={marker.sprite}
-                          scale={marker.scale}
-                        />
+                        <Marker sprite={marker.sprite} scale={marker.scale} />
                       </Perch>
                       <span className="stop-label">{marker.label}</span>
                     </div>

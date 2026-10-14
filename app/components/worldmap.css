@@ -167,3 +167,124 @@
 .world-walker[data-facing="-1"] svg {
   transform: scaleX(-1);
 }
+
+/* Pulse: a pixel frame ripples out from the building under the pointer or focus. */
+.world-link {
+  position: relative;
+}
+
+.world-link::before {
+  content: "";
+  position: absolute;
+  top: 0.25rem;
+  left: 50%;
+  width: 16.7cqw;
+  height: 16.7cqw;
+  margin-left: -8.35cqw;
+  border: 3px dashed var(--amber, #ffc15a);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .world-link::before {
+    width: 8.33cqw;
+    height: 8.33cqw;
+    margin-left: -4.165cqw;
+  }
+}
+
+.world-link:hover::before,
+.world-link:focus-visible::before,
+.world-link[data-active="true"]::before {
+  animation: world-ping 1.2s steps(5, end) infinite;
+}
+
+@keyframes world-ping {
+  from {
+    opacity: 0.9;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+
+/* Lit windows on the landmarks dim and relight on their own beat. */
+.world-window {
+  animation: world-window 3.2s steps(1, end) infinite;
+}
+
+@keyframes world-window {
+  0%,
+  68% {
+    opacity: 1;
+  }
+  69%,
+  84% {
+    opacity: 0.3;
+  }
+  85%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Canal glints slide one dash width, then loop seamlessly. */
+.world-glint {
+  animation: world-glint 2.4s steps(3, end) infinite;
+}
+
+.world-glint-rev {
+  animation-direction: reverse;
+  animation-duration: 3.6s;
+}
+
+@keyframes world-glint {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(6px);
+  }
+}
+
+/* Cars crawl along each stretch of the main road, then start over. */
+.world-car {
+  animation: world-drive var(--dur) steps(48, end) infinite;
+  animation-delay: var(--delay);
+}
+
+.world-car-rev {
+  animation-direction: reverse;
+}
+
+@keyframes world-drive {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(var(--dx), var(--dy));
+  }
+}
+
+/* Plaza traffic lights swap red and green. */
+.world-signal-a {
+  animation: world-signal 6s steps(1, end) infinite;
+}
+
+.world-signal-b {
+  animation: world-signal 6s steps(1, end) infinite reverse;
+}
+
+@keyframes world-signal {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0.15;
+  }
+}

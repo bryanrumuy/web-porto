@@ -19,21 +19,37 @@
   animation: drift 4s steps(8, end) infinite alternate;
 }
 
-.inv { display: grid; }
+.inv {
+  display: grid;
+}
 .inv > svg {
   grid-area: 1 / 1;
   width: clamp(1.75rem, 8vw, 2.75rem);
   height: auto;
 }
-.inv-pink { color: var(--pink); }
-.inv-cyan { color: var(--cyan); }
-.inv-amber { color: var(--amber); }
+.inv-pink {
+  color: var(--pink);
+}
+.inv-cyan {
+  color: var(--cyan);
+}
+.inv-amber {
+  color: var(--amber);
+}
 
 /* Static state shows frame A only; the march swaps frames in two steps. */
-.inv-b { opacity: 0; }
-.inv-a { animation: frame-a 1s steps(1, end) infinite; }
-.inv-b { animation: frame-b 1s steps(1, end) infinite; }
-.inv:nth-child(even) > svg { animation-delay: -0.5s; }
+.inv-b {
+  opacity: 0;
+}
+.inv-a {
+  animation: frame-a 1s steps(1, end) infinite;
+}
+.inv-b {
+  animation: frame-b 1s steps(1, end) infinite;
+}
+.inv:nth-child(even) > svg {
+  animation-delay: -0.5s;
+}
 
 /* ---------- Cabinet ---------- */
 .cab-body {
@@ -50,7 +66,10 @@
 }
 
 @media (min-width: 640px) {
-  .cab-body { padding: 1.5rem; gap: 2rem; }
+  .cab-body {
+    padding: 1.5rem;
+    gap: 2rem;
+  }
 }
 
 /* Marquee sign with chasing bulbs. */
@@ -60,27 +79,39 @@
   border: 4px solid var(--amber);
   padding: 2rem 1rem;
   text-align: center;
+  overflow: hidden;
 }
 
 .cab-marquee::before,
 .cab-marquee::after {
   content: "";
   position: absolute;
-  left: 12px;
-  right: 12px;
+  left: -24px;
+  right: 0;
   height: 4px;
-  background: repeating-linear-gradient(90deg, var(--amber) 0 8px, transparent 8px 24px);
-  animation: bulbs 0.8s steps(2, end) infinite;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--amber) 0 8px,
+    transparent 8px 24px
+  );
+  animation: bulbs 0.6s steps(3, end) infinite;
 }
-.cab-marquee::before { top: 10px; }
-.cab-marquee::after { bottom: 10px; animation-direction: reverse; }
+.cab-marquee::before {
+  top: 10px;
+}
+.cab-marquee::after {
+  bottom: 10px;
+  animation-direction: reverse;
+}
 
 .cab-title {
   font-family: var(--theme-display), monospace;
   font-size: clamp(1.1rem, 5.2vw, 2rem);
   line-height: 1.3;
   color: var(--amber);
-  text-shadow: 3px 3px 0 var(--pink), 6px 6px 0 var(--background);
+  text-shadow:
+    3px 3px 0 var(--pink),
+    6px 6px 0 var(--background);
   animation: neon 3.2s steps(1, end) infinite;
 }
 
@@ -109,11 +140,18 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.14) 0 2px, transparent 2px 4px);
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.14) 0 2px,
+    transparent 2px 4px
+  );
 }
 
 @media (min-width: 640px) {
-  .cab-screen { padding: 2rem; gap: 2rem; }
+  .cab-screen {
+    padding: 2rem;
+    gap: 2rem;
+  }
 }
 
 .cab-hud {
@@ -123,9 +161,17 @@
   font-size: 0.625rem;
   color: var(--muted);
 }
-.cab-hud span:first-child { justify-self: start; color: var(--pink); }
-.cab-hud span:nth-child(2) { color: var(--amber); }
-.cab-hud span:last-child { justify-self: end; color: var(--cyan); }
+.cab-hud span:first-child {
+  justify-self: start;
+  color: var(--pink);
+}
+.cab-hud span:nth-child(2) {
+  color: var(--amber);
+}
+.cab-hud span:last-child {
+  justify-self: end;
+  color: var(--cyan);
+}
 
 /* High score panel. */
 .cab-scores {
@@ -156,8 +202,13 @@
   border-top: 4px dotted var(--line);
   font-size: 1.5rem;
 }
-.cab-row dt { color: var(--muted); }
-.cab-row dd { min-width: 0; max-width: 100%; }
+.cab-row dt {
+  color: var(--muted);
+}
+.cab-row dd {
+  min-width: 0;
+  max-width: 100%;
+}
 
 /* ---------- Control deck ---------- */
 .cab-deck {
@@ -172,9 +223,17 @@
   padding: 2rem 1rem;
 }
 
-.cab-a { grid-area: a; }
-.cab-b { grid-area: b; }
-.cab-stick { grid-area: stick; width: 4rem; height: auto; }
+.cab-a {
+  grid-area: a;
+}
+.cab-b {
+  grid-area: b;
+}
+.cab-stick {
+  grid-area: stick;
+  width: 4rem;
+  height: auto;
+}
 
 @media (max-width: 559px) {
   .cab-deck {
@@ -208,11 +267,23 @@
 }
 
 @media (min-width: 640px) {
-  .arcade-btn { width: 9rem; height: 9rem; font-size: 0.75rem; }
-  .cab-stick { width: 5rem; }
+  .arcade-btn {
+    width: 9rem;
+    height: 9rem;
+    font-size: 0.75rem;
+  }
+  .cab-stick {
+    width: 5rem;
+  }
 }
 
-.arcade-btn:hover { transform: translateY(-2px); }
+.arcade-btn {
+  position: relative;
+  transition: transform 0.08s steps(2, end);
+}
+.arcade-btn:hover {
+  transform: translateY(-2px);
+}
 .arcade-btn:active {
   transform: translateY(4px);
   box-shadow:
@@ -223,8 +294,13 @@
     0 0 0 12px var(--line);
 }
 
-.arcade-btn:focus-visible { outline: 4px solid var(--amber); outline-offset: 16px; }
-.arcade-btn-cyan { --cap: var(--cyan); }
+.arcade-btn:focus-visible {
+  outline: 4px solid var(--amber);
+  outline-offset: 16px;
+}
+.arcade-btn-cyan {
+  --cap: var(--cyan);
+}
 
 /* ---------- Coin bay ---------- */
 .cab-bay {
@@ -238,8 +314,13 @@
   font-size: 0.625rem;
   color: var(--amber);
 }
-.cab-bay-label:first-child { justify-self: end; }
-.cab-bay-label:last-child { justify-self: start; color: var(--cyan); }
+.cab-bay-label:first-child {
+  justify-self: end;
+}
+.cab-bay-label:last-child {
+  justify-self: start;
+  color: var(--cyan);
+}
 
 .cab-hole {
   position: relative;
@@ -258,7 +339,12 @@
   border: 4px solid var(--amber);
   box-shadow: 4px 4px 0 var(--line);
 }
-.cab-slit { width: 1.25rem; height: 0.5rem; background: var(--pink); border: 2px solid var(--background); }
+.cab-slit {
+  width: 1.25rem;
+  height: 0.5rem;
+  background: var(--pink);
+  border: 2px solid var(--background);
+}
 
 .cab-fall {
   position: absolute;
@@ -280,47 +366,110 @@
   background: linear-gradient(0deg, var(--surface) 0%, var(--background) 100%);
 }
 
-.cab-floor::before {
-  content: "";
+.cab-plane {
   position: absolute;
   inset: -200% -60% 0;
+  overflow: hidden;
   transform-origin: 50% 100%;
   transform: perspective(240px) rotateX(58deg);
+  -webkit-mask-image: linear-gradient(0deg, #000 35%, transparent 100%);
+  mask-image: linear-gradient(0deg, #000 35%, transparent 100%);
+}
+
+.cab-grid {
+  position: absolute;
+  inset: -56px 0 0;
   background-image:
     linear-gradient(var(--pink) 3px, transparent 3px),
     linear-gradient(90deg, var(--cyan) 3px, transparent 3px);
   background-size: 56px 56px;
   background-position: center bottom;
   animation: floor 1s steps(7, end) infinite;
-  -webkit-mask-image: linear-gradient(0deg, #000 35%, transparent 100%);
-  mask-image: linear-gradient(0deg, #000 35%, transparent 100%);
 }
 
 /* ---------- Motion ---------- */
-@keyframes drift { to { transform: translateX(1rem); } }
-@keyframes frame-a { 50% { opacity: 0; } }
-@keyframes frame-b { 50% { opacity: 1; } }
-@keyframes bulbs { to { background-position: 24px 0; } }
-@keyframes floor { to { background-position: center calc(100% + 56px); } }
+@keyframes drift {
+  to {
+    transform: translateX(1rem);
+  }
+}
+@keyframes frame-a {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes frame-b {
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes bulbs {
+  to {
+    transform: translateX(24px);
+  }
+}
+@keyframes floor {
+  to {
+    transform: translateY(56px);
+  }
+}
 @keyframes coin-drop {
-  from { transform: translateY(-3rem); opacity: 1; }
-  80% { transform: translateY(1.25rem); opacity: 1; }
-  to { transform: translateY(1.5rem); opacity: 0; }
+  from {
+    transform: translateY(-3rem);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(1.25rem);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(1.5rem);
+    opacity: 0;
+  }
 }
 @keyframes neon {
-  0% { text-shadow: 3px 3px 0 var(--pink), 6px 6px 0 var(--background); opacity: 1; }
-  42% { opacity: 0.6; }
-  44% { opacity: 1; }
-  50% { text-shadow: 3px 3px 0 var(--cyan), 6px 6px 0 var(--background); }
-  92% { opacity: 0.6; }
-  94% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 0.45;
+  }
+  44% {
+    opacity: 1;
+  }
+  46% {
+    opacity: 0.6;
+  }
+  48% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 0.5;
+  }
+  94% {
+    opacity: 1;
+  }
 }
 
 /* globals.css already stops animations; keep transient extras out of the static view. */
 @media (prefers-reduced-motion: reduce) {
-  .cab-fall { display: none; }
-  .inv-b { opacity: 0 !important; }
-  .inv-a { opacity: 1 !important; }
+  .cab-fall,
+  .cab-burst {
+    display: none;
+  }
+  .inv-b {
+    opacity: 0 !important;
+  }
+  .inv-a {
+    opacity: 1 !important;
+  }
 }
 
 /* Links inside the high-score panel. */

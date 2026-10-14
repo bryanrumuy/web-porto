@@ -86,7 +86,12 @@ export const GROUND_TOP = 48;
 export type Rect = { x: number; y: number; w: number; h: number };
 
 /** Periodic hill silhouette: integer wave counts keep the tile seamless. */
-function hills(base: number, amp: number, waves: [number, number], phase: number): Rect[] {
+function hills(
+  base: number,
+  amp: number,
+  waves: [number, number],
+  phase: number,
+): Rect[] {
   const tops = Array.from({ length: TILE }, (_, x) => {
     const a = Math.sin((2 * Math.PI * x * waves[0]) / TILE + phase);
     const b = Math.sin((2 * Math.PI * x * waves[1]) / TILE + phase * 2.3);
@@ -96,7 +101,12 @@ function hills(base: number, amp: number, waves: [number, number], phase: number
   let start = 0;
   for (let x = 1; x <= TILE; x++) {
     if (x === TILE || tops[x] !== tops[start]) {
-      rects.push({ x: start, y: tops[start], w: x - start, h: SCENE_H - tops[start] });
+      rects.push({
+        x: start,
+        y: tops[start],
+        w: x - start,
+        h: SCENE_H - tops[start],
+      });
       start = x;
     }
   }
@@ -135,10 +145,77 @@ export const TREES = [24, 58, 71, 118, 150, 163, 205, 226].flatMap((c, i) =>
 /** Ground strip: dark edge line, then sparse texture and grass tufts. */
 export const GROUND_EDGE: Rect[] = [{ x: 0, y: GROUND_TOP, w: TILE, h: 1 }];
 export const GROUND_TEXTURE: Rect[] = [
-  ...Array.from({ length: 30 }, (_, i) => ({ x: i * 8 + (i % 3), y: 51, w: 2, h: 1 })),
-  ...Array.from({ length: 24 }, (_, i) => ({ x: i * 10 + 4 + (i % 2) * 3, y: 54, w: 3, h: 1 })),
+  ...Array.from({ length: 30 }, (_, i) => ({
+    x: i * 8 + (i % 3),
+    y: 51,
+    w: 2,
+    h: 1,
+  })),
+  ...Array.from({ length: 24 }, (_, i) => ({
+    x: i * 10 + 4 + (i % 2) * 3,
+    y: 54,
+    w: 3,
+    h: 1,
+  })),
 ];
 export const TUFTS: Rect[] = [12, 47, 90, 133, 176, 221].flatMap((x) => [
   { x, y: GROUND_TOP - 2, w: 1, h: 2 },
   { x: x + 2, y: GROUND_TOP - 1, w: 1, h: 1 },
 ]);
+
+// --- Extra scenery -----------------------------------------------------
+
+/** A faster, lower cloud layer in front of the far hills. */
+export const CLOUDS_NEAR = [
+  ...cloud(60, 20),
+  ...cloud(140, 24),
+  ...cloud(214, 17),
+].filter((r) => r.x + r.w <= TILE);
+
+/** Flowers on the ground strip: a stem plus a dark bloom. */
+const FLOWER_X = [28, 66, 109, 151, 187, 214];
+export const FLOWER_STEMS: Rect[] = FLOWER_X.map((x) => ({
+  x,
+  y: GROUND_TOP - 2,
+  w: 1,
+  h: 2,
+}));
+export const FLOWER_BLOOMS: Rect[] = FLOWER_X.flatMap((x) => [
+  { x: x - 1, y: GROUND_TOP - 3, w: 3, h: 1 },
+  { x, y: GROUND_TOP - 4, w: 1, h: 1 },
+]);
+
+/** Tall grass drawn in front of the walker's feet on the fastest layer. */
+const GRASS_X = [5, 31, 62, 97, 128, 166, 199, 233];
+export const FOREGROUND_DARK: Rect[] = GRASS_X.flatMap((x) => [
+  { x, y: 51, w: 1, h: 5 },
+  { x: x + 2, y: 53, w: 1, h: 3 },
+]);
+export const FOREGROUND_MID: Rect[] = GRASS_X.map((x) => ({
+  x: x + 1,
+  y: 52,
+  w: 1,
+  h: 4,
+}));
+
+/** Night stars in two groups so they can twinkle out of step. */
+export const STARS_A: Rect[] = [
+  [8, 4],
+  [31, 12],
+  [57, 3],
+  [84, 16],
+  [112, 6],
+  [139, 14],
+  [166, 4],
+  [190, 11],
+].map(([x, y]) => ({ x, y, w: 1, h: 1 }));
+export const STARS_B: Rect[] = [
+  [19, 9],
+  [44, 18],
+  [71, 8],
+  [99, 3],
+  [126, 11],
+  [153, 19],
+  [178, 8],
+  [203, 15],
+].map(([x, y]) => ({ x, y, w: 1, h: 1 }));

@@ -28,6 +28,7 @@ type Walker = {
 };
 
 type Car = {
+  kind: "car" | "taxi" | "bus";
   body: string;
   bottom: number;
   startX: number;
@@ -51,39 +52,148 @@ const STAND_ROWS = ["...L...", "...L...", "..OOO.."];
 
 const WALKERS: readonly Walker[] = [
   {
-    look: { hair: "#1b1b3a", skin: "#e0ac7c", body: "#ff4fd8", legs: "#2a2b66", shoes: "#fff4e0" },
+    look: {
+      hair: "#1b1b3a",
+      skin: "#e0ac7c",
+      body: "#ff4fd8",
+      legs: "#2a2b66",
+      shoes: "#fff4e0",
+    },
     startX: 30,
     reverse: false,
     seconds: 46,
     delay: -8,
   },
   {
-    look: { hair: "#7a3b1d", skin: "#f2c9a0", body: "#4de8f0", legs: "#1d2a4a", shoes: "#ffc15a", umbrella: "#ff4fd8" },
+    look: {
+      hair: "#7a3b1d",
+      skin: "#f2c9a0",
+      body: "#4de8f0",
+      legs: "#1d2a4a",
+      shoes: "#ffc15a",
+      umbrella: "#ff4fd8",
+    },
     startX: 120,
     reverse: true,
     seconds: 58,
     delay: -30,
   },
   {
-    look: { hair: "#101010", skin: "#c58c5f", body: "#ffc15a", legs: "#3a2a1a", shoes: "#111111" },
+    look: {
+      hair: "#101010",
+      skin: "#c58c5f",
+      body: "#ffc15a",
+      legs: "#3a2a1a",
+      shoes: "#111111",
+    },
     startX: 210,
     reverse: false,
     seconds: 38,
     delay: -22,
   },
   {
-    look: { hair: "#d8d8e8", skin: "#e0ac7c", body: "#8a6bff", legs: "#222244", shoes: "#fff4e0", umbrella: "#4de8f0" },
+    look: {
+      hair: "#d8d8e8",
+      skin: "#e0ac7c",
+      body: "#8a6bff",
+      legs: "#222244",
+      shoes: "#fff4e0",
+      umbrella: "#4de8f0",
+    },
     startX: 270,
     reverse: true,
     seconds: 52,
     delay: -5,
   },
+  {
+    look: {
+      hair: "#3a1c5e",
+      skin: "#f2c9a0",
+      body: "#ff7a3d",
+      legs: "#2a2b66",
+      shoes: "#4de8f0",
+      umbrella: "#ffc15a",
+    },
+    startX: 80,
+    reverse: false,
+    seconds: 62,
+    delay: -40,
+  },
+  {
+    look: {
+      hair: "#e8c36a",
+      skin: "#e0ac7c",
+      body: "#4dff9a",
+      legs: "#1d2a4a",
+      shoes: "#ff4fd8",
+    },
+    startX: 180,
+    reverse: true,
+    seconds: 44,
+    delay: -15,
+  },
+  {
+    look: {
+      hair: "#2a1a4d",
+      skin: "#c58c5f",
+      body: "#ff3b5c",
+      legs: "#3a2a1a",
+      shoes: "#fff4e0",
+      umbrella: "#8a6bff",
+    },
+    startX: 250,
+    reverse: false,
+    seconds: 56,
+    delay: -48,
+  },
 ];
 
+// A dog trots a few steps ahead of the third pedestrian (same pace, same lane).
+const DOG_ROWS = ["D.....DD", "DDDDDDDD", "DDDDDDDD"];
+const DOG_STRIDE = "D.D..D.D";
+const DOG_STAND = ".D.DD.D.";
+const DOG = { color: "#c08a52", startX: 226, seconds: 38, delay: -22 };
+
 const CARS: readonly Car[] = [
-  { body: "#c03a5c", bottom: 168, startX: 60, reverse: false, seconds: 16, delay: -4 },
-  { body: "#2f6fd6", bottom: 178, startX: 200, reverse: true, seconds: 22, delay: -13 },
+  {
+    kind: "car",
+    body: "#c03a5c",
+    bottom: 168,
+    startX: 60,
+    reverse: false,
+    seconds: 16,
+    delay: -4,
+  },
+  {
+    kind: "taxi",
+    body: "#ffc15a",
+    bottom: 168,
+    startX: 60,
+    reverse: false,
+    seconds: 16,
+    delay: -12,
+  },
+  {
+    kind: "car",
+    body: "#2f6fd6",
+    bottom: 178,
+    startX: 200,
+    reverse: true,
+    seconds: 22,
+    delay: -13,
+  },
+  {
+    kind: "bus",
+    body: "#18a5a0",
+    bottom: 178,
+    startX: 200,
+    reverse: true,
+    seconds: 22,
+    delay: -2,
+  },
 ];
+const CAR_WIDTH = 26;
+const BUS_WIDTH = 40;
 
 const LAMP_XS = [48, 150, 262] as const;
 const STEAM_X = 204;
@@ -92,7 +202,7 @@ function mirror(rows: readonly string[]): string[] {
   return rows.map((row) => [...row].reverse().join(""));
 }
 
-function rect(
+export function rect(
   key: string,
   x: number,
   y: number,
@@ -116,12 +226,7 @@ function rect(
   );
 }
 
-function rows(
-  id: string,
-  sprite: Sprite,
-  x: number,
-  y: number,
-): ReactNode[] {
+function rows(id: string, sprite: Sprite, x: number, y: number): ReactNode[] {
   return sprite.rows.flatMap((row, dy) =>
     toRuns(row).map((run) =>
       rect(
@@ -145,7 +250,10 @@ function figure(id: string, look: Look, reverse: boolean, legRows: string[]) {
     O: look.shoes,
   };
   const all = [...TOP_ROWS, ...legRows];
-  return mergeRects(rows(id, { rows: reverse ? mirror(all) : all, palette }, 0, 0), id);
+  return mergeRects(
+    rows(id, { rows: reverse ? mirror(all) : all, palette }, 0, 0),
+    id,
+  );
 }
 
 function umbrella(id: string, color: string): ReactNode[] {
@@ -184,8 +292,30 @@ export function walkers(): ReactNode[] {
   });
 }
 
-function carShape(id: string, body: string): ReactNode[] {
+function busShape(id: string, body: string): ReactNode[] {
+  const windows = Array.from({ length: 6 }, (_, k) =>
+    rect(`${id}-win-${k}`, 3 + k * 6, 2, 4, 3, "#9fd8ff"),
+  );
   return [
+    rect(`${id}-beam1`, 40, 5, 6, 2, HEADLIGHT, 0.28),
+    rect(`${id}-beam2`, 46, 4, 8, 4, HEADLIGHT, 0.17),
+    rect(`${id}-beam3`, 54, 3, 10, 6, HEADLIGHT, 0.09),
+    rect(`${id}-body`, 1, 0, 38, 9, body),
+    ...windows,
+    rect(`${id}-stripe`, 1, 6, 38, 1, "#fff4e0", 0.7),
+    rect(`${id}-trim`, 1, 8, 38, 1, "#0d0221", 0.5),
+    rect(`${id}-head`, 38, 5, 2, 2, HEADLIGHT),
+    rect(`${id}-tail`, 0, 5, 1, 2, "#ff3b5c"),
+    rect(`${id}-wheel1`, 5, 8, 5, 3, "#0d0221"),
+    rect(`${id}-wheel2`, 28, 8, 5, 3, "#0d0221"),
+    rect(`${id}-hub1`, 7, 9, 1, 1, "#8a8aa8"),
+    rect(`${id}-hub2`, 30, 9, 1, 1, "#8a8aa8"),
+  ];
+}
+
+function carShape(id: string, body: string, taxi = false): ReactNode[] {
+  return [
+    ...(taxi ? [rect(`${id}-sign`, 10, -1, 3, 1, "#fff4e0")] : []),
     rect(`${id}-beam1`, 26, 5, 6, 2, HEADLIGHT, 0.28),
     rect(`${id}-beam2`, 32, 4, 8, 4, HEADLIGHT, 0.17),
     rect(`${id}-beam3`, 40, 3, 10, 6, HEADLIGHT, 0.09),
@@ -211,7 +341,8 @@ export function cars(): ReactNode[] {
       "--delay": `${car.delay}s`,
     } as CSSProperties;
     // Cars are drawn facing right; the reverse lane mirrors them.
-    const flip = car.reverse ? "translate(26 0) scale(-1 1)" : undefined;
+    const width = car.kind === "bus" ? BUS_WIDTH : CAR_WIDTH;
+    const flip = car.reverse ? `translate(${width} 0) scale(-1 1)` : undefined;
     return (
       <g
         key={id}
@@ -219,11 +350,36 @@ export function cars(): ReactNode[] {
         style={style}
       >
         <g transform={`translate(${car.startX} ${car.bottom - 11})`}>
-          <g transform={flip}>{carShape(id, car.body)}</g>
+          <g transform={flip}>
+            {car.kind === "bus"
+              ? busShape(id, car.body)
+              : carShape(id, car.body, car.kind === "taxi")}
+          </g>
         </g>
       </g>
     );
   });
+}
+
+export function dogs(): ReactNode[] {
+  const id = "dog";
+  const style = {
+    "--dur": `${DOG.seconds}s`,
+    "--delay": `${DOG.delay}s`,
+  } as CSSProperties;
+  const frame = (key: string, legs: string) => {
+    const all = [...DOG_ROWS, legs];
+    const sprite = { rows: all, palette: { D: DOG.color } };
+    return mergeRects(rows(`${id}-${key}`, sprite, 0, 0), `${id}-${key}`);
+  };
+  return [
+    <g key={id} className="scene-walker" style={style}>
+      <g transform={`translate(${DOG.startX} ${WALK_FEET - 4})`}>
+        <g className="scene-frame-a">{frame("a", DOG_STRIDE)}</g>
+        <g className="scene-frame-b">{frame("b", DOG_STAND)}</g>
+      </g>
+    </g>,
+  ];
 }
 
 export function blimp(): ReactNode {
@@ -232,7 +388,14 @@ export function blimp(): ReactNode {
     <g key="blimp" className="scene-blimp">
       <g transform="translate(0 24)">
         {halves.map((half, dy) =>
-          rect(`blimp-${dy}`, 16 - half, dy, half * 2, 1, dy < 2 ? "#5a3c98" : "#3a2468"),
+          rect(
+            `blimp-${dy}`,
+            16 - half,
+            dy,
+            half * 2,
+            1,
+            dy < 2 ? "#5a3c98" : "#3a2468",
+          ),
         )}
         {rect("blimp-gondola", 12, 8, 8, 2, "#1b0f33")}
         {rect("blimp-fin-a", 0, 2, 3, 3, "#2a1a4d")}
@@ -250,7 +413,15 @@ export function lamps(): ReactNode[] {
     const top = GROUND - 24;
     const cone = Array.from({ length: 16 }, (_, k) => {
       const half = 1 + Math.round(k * 0.75);
-      return rect(`lamp-${x}-cone-${k}`, x + 4 - half, top + 2 + k, half * 2 + 1, 1, HEADLIGHT, 0.07);
+      return rect(
+        `lamp-${x}-cone-${k}`,
+        x + 4 - half,
+        top + 2 + k,
+        half * 2 + 1,
+        1,
+        HEADLIGHT,
+        0.07,
+      );
     });
     return [
       rect(`lamp-${x}-pole`, x, top, 1, 24, "#2a1a4d"),
@@ -263,7 +434,11 @@ export function lamps(): ReactNode[] {
 
 export function steam(): ReactNode[] {
   return [0, 1, 2].map((i) => (
-    <g key={`steam-${i}`} className="scene-steam" style={{ animationDelay: `${i * -0.9}s` }}>
+    <g
+      key={`steam-${i}`}
+      className="scene-steam"
+      style={{ animationDelay: `${i * -0.9}s` }}
+    >
       {rect(`steam-${i}-a`, STEAM_X + i, 162, 3, 2, "#cfe3ff", 0.3)}
       {rect(`steam-${i}-b`, STEAM_X + 2 - i, 160, 2, 2, "#cfe3ff", 0.22)}
     </g>

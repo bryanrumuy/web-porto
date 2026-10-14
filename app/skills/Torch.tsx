@@ -8,6 +8,9 @@ export function Torch({ side }: TorchProps) {
     <div className={`torch torch-${side}`} aria-hidden="true">
       <PixelSprite sprite={TORCH_A} scale={8} className="torch-frame-a" />
       <PixelSprite sprite={TORCH_B} scale={8} className="torch-frame-b" />
+      <span className="torch-spark torch-spark-1" />
+      <span className="torch-spark torch-spark-2" />
+      <span className="torch-spark torch-spark-3" />
     </div>
   );
 }

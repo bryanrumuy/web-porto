@@ -1,0 +1,530 @@
+/* Arcade room extras: stars, side machines, attract mode, coin and confetti effects.
+   Only transform and opacity move, always on steps() so frames stay pixel-crisp. */
+.cab {
+  position: relative;
+}
+.cab-sky,
+.cab-side {
+  pointer-events: none;
+}
+.inv-band,
+.cab-body,
+.cab-floor {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Floating stars ---------- */
+.cab-sky {
+  position: absolute;
+  inset: -1rem -2rem 0;
+  z-index: 0;
+}
+
+.spark {
+  position: absolute;
+  line-height: 0;
+  animation: twinkle 2.4s steps(1, end) infinite;
+}
+.spark svg {
+  animation: bob 2.4s steps(4, end) infinite alternate;
+}
+.spark-pink {
+  color: var(--pink);
+}
+.spark-cyan {
+  color: var(--cyan);
+}
+.spark-amber {
+  color: var(--amber);
+}
+
+/* ---------- Neon bolts beside the invaders ---------- */
+.inv-band {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.5rem, 3vw, 1.5rem);
+}
+.bolt {
+  flex: none;
+  animation: sign 4.4s steps(1, end) infinite;
+}
+.bolt-l {
+  color: var(--cyan);
+}
+.bolt-r {
+  color: var(--pink);
+  transform: scaleX(-1);
+  animation-delay: -2.1s;
+}
+
+/* ---------- Side machines and posters (wide screens only) ---------- */
+.cab-side {
+  display: none;
+}
+
+@media (min-width: 1100px) {
+  .cab-side {
+    position: absolute;
+    bottom: 13rem;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+  }
+  .cab-side-l {
+    right: calc(100% + 2rem);
+  }
+  .cab-side-r {
+    left: calc(100% + 2rem);
+  }
+}
+
+.poster {
+  line-height: 0;
+  animation: sway 3s steps(2, end) infinite alternate;
+  transform-origin: 50% 0;
+}
+.poster-pink {
+  color: var(--pink);
+}
+.poster-cyan {
+  color: var(--cyan);
+  animation-delay: -1.5s;
+}
+.mach .px-G {
+  animation: sign 2.6s steps(1, end) infinite;
+}
+.mach .px-M {
+  animation: blink 1.2s steps(1, end) infinite;
+}
+.cab-side-r .mach .px-G {
+  animation-delay: -1.3s;
+}
+.cab-side-r .mach .px-M {
+  animation-delay: -0.6s;
+}
+
+/* ---------- Staggered entrance ---------- */
+.inv-band,
+.cab-body > *,
+.cab-floor {
+  animation: rise 0.6s steps(6, end) both;
+  animation-delay: calc(var(--n, 0) * 0.1s);
+}
+.cab-body > :nth-child(1) {
+  --n: 1;
+}
+.cab-body > :nth-child(2) {
+  --n: 2;
+}
+.cab-body > :nth-child(3) {
+  --n: 3;
+}
+.cab-body > :nth-child(4) {
+  --n: 4;
+}
+.cab-floor {
+  --n: 5;
+}
+
+/* ---------- CRT screen ---------- */
+.cab-screen {
+  overflow: hidden;
+}
+.cab-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 60%
+  );
+  animation: roll 5s steps(30, end) infinite;
+}
+.cab-screen::after {
+  z-index: 2;
+  animation: crt 0.16s steps(1, end) infinite;
+}
+
+/* Attract mode: chomper, ghost, pellets. */
+.cab-attract {
+  position: relative;
+}
+.att-track {
+  position: relative;
+  height: 2.25rem;
+  overflow: hidden;
+  container-type: inline-size;
+}
+.att-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 6px;
+  margin-top: -3px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--amber) 0 6px,
+    transparent 6px 24px
+  );
+  animation: blink 1.2s steps(1, end) infinite;
+}
+.att-eaten {
+  position: absolute;
+  inset: 0;
+  background: var(--background);
+  transform-origin: 0 50%;
+  animation: eat 7s steps(28, end) -1s infinite;
+}
+.att-actor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  line-height: 0;
+}
+.att-actor > svg {
+  grid-area: 1 / 1;
+}
+.att-chomp {
+  color: var(--amber);
+  animation: run 7s steps(28, end) -1s infinite both;
+}
+.att-ghost {
+  color: var(--pink);
+  animation: run 7s steps(28, end) infinite both;
+}
+.att-b {
+  opacity: 0;
+}
+.att-a {
+  animation: frame-a 0.4s steps(1, end) infinite;
+}
+.att-b {
+  animation: frame-b 0.4s steps(1, end) infinite;
+}
+
+/* ---------- Joystick and buttons ---------- */
+.cab-stick {
+  transform-origin: 50% 90%;
+  animation: wobble 3.6s steps(1, end) infinite;
+  transition: transform 0.08s steps(2, end);
+}
+.cab-deck:has(.cab-a:hover, .cab-a:focus-visible) .cab-stick {
+  animation: none;
+  transform: rotate(-14deg);
+}
+.cab-deck:has(.cab-b:hover, .cab-b:focus-visible) .cab-stick {
+  animation: none;
+  transform: rotate(14deg);
+}
+.cab-deck:has(.cab-a:active) .cab-stick {
+  animation: none;
+  transform: rotate(-22deg) translateY(2px);
+}
+.cab-deck:has(.cab-b:active) .cab-stick {
+  animation: none;
+  transform: rotate(22deg) translateY(2px);
+}
+
+.arcade-btn::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  opacity: 0.55;
+  pointer-events: none;
+  animation: blink 1.8s steps(1, end) infinite;
+}
+.cab-b::after {
+  animation-delay: -0.9s;
+}
+
+/* ---------- Coin slot ---------- */
+.cab-arrow {
+  position: absolute;
+  top: -1.4rem;
+  left: 50%;
+  margin-left: -10px;
+  color: var(--amber);
+  animation: nudge 0.8s steps(2, end) infinite;
+}
+.cab-slit {
+  animation: blink 1.2s steps(1, end) infinite;
+}
+.cab-glow {
+  position: absolute;
+  inset: -8px;
+  border: 4px solid var(--pink);
+  pointer-events: none;
+  animation: ring 0.5s steps(4, end) both;
+}
+.cab-fall svg {
+  animation: spin 0.3s steps(1, end) 2;
+}
+.cab-credit {
+  display: inline-block;
+  animation: bump 0.4s steps(4, end);
+}
+
+/* ---------- Confetti burst ---------- */
+.cab-burst {
+  position: absolute;
+  z-index: 5;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.conf {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  animation: confetti 0.9s steps(9, end) both;
+}
+.conf-big {
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+}
+.conf-pink {
+  background: var(--pink);
+}
+.conf-cyan {
+  background: var(--cyan);
+}
+.conf-amber {
+  background: var(--amber);
+}
+.conf-violet {
+  background: var(--violet);
+}
+
+/* ---------- Floor reflection ---------- */
+.cab-floor::after {
+  content: "";
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  top: 0;
+  height: 65%;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--pink) 55%, transparent),
+    color-mix(in srgb, var(--cyan) 25%, transparent) 55%,
+    transparent
+  );
+  -webkit-mask-image: repeating-linear-gradient(
+    180deg,
+    #000 0 6px,
+    transparent 6px 10px
+  );
+  mask-image: repeating-linear-gradient(
+    180deg,
+    #000 0 6px,
+    transparent 6px 10px
+  );
+  animation: reflect 2.4s steps(1, end) infinite;
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+@keyframes bob {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(-0.5rem) scale(1.4);
+  }
+}
+@keyframes sign {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  8% {
+    opacity: 0.3;
+  }
+  10% {
+    opacity: 1;
+  }
+  12% {
+    opacity: 0.4;
+  }
+  14% {
+    opacity: 1;
+  }
+  62% {
+    opacity: 0.5;
+  }
+  64% {
+    opacity: 1;
+  }
+}
+@keyframes blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+@keyframes sway {
+  from {
+    transform: rotate(-2deg);
+  }
+  to {
+    transform: rotate(2deg);
+  }
+}
+@keyframes roll {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+@keyframes crt {
+  50% {
+    opacity: 0.8;
+  }
+}
+@keyframes run {
+  from {
+    transform: translateX(-3rem);
+  }
+  to {
+    transform: translateX(calc(100cqw - 2.25rem));
+  }
+}
+@keyframes eat {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes wobble {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  30% {
+    transform: rotate(-5deg);
+  }
+  60% {
+    transform: rotate(5deg);
+  }
+}
+@keyframes nudge {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(5px);
+  }
+}
+@keyframes ring {
+  from {
+    opacity: 1;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+@keyframes spin {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  33% {
+    transform: scaleX(0.4);
+  }
+  66% {
+    transform: scaleX(0.15);
+  }
+}
+@keyframes bump {
+  from {
+    transform: scale(1.9);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes confetti {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(var(--dx), var(--dy));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), calc(var(--dy) + 48px));
+  }
+}
+@keyframes reflect {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .att-eaten {
+    transform: scaleX(0);
+  }
+  .att-chomp {
+    transform: translateX(40%);
+  }
+  .att-ghost {
+    display: none;
+  }
+  .att-a {
+    opacity: 1 !important;
+  }
+  .att-b {
+    opacity: 0 !important;
+  }
+  .cab-glow,
+  .cab-burst {
+    display: none;
+  }
+}

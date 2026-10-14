@@ -16,16 +16,29 @@
 }
 
 .gb-led {
+  position: relative;
   width: 10px;
   height: 10px;
   background: var(--surface);
   box-shadow: 0 0 0 3px var(--foreground);
-  animation: gb-power 3s steps(1, end) infinite;
+  animation: gb-led-on 0.5s steps(2, end) 0.5s backwards;
 }
 
-@keyframes gb-power {
-  0%, 92% { opacity: 1; }
-  93%, 100% { opacity: 0.45; }
+/* Pulsing power halo. */
+.gb-led::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--surface);
+  opacity: 0;
+  animation: gb-led-pulse 2.4s steps(4, end) 1.2s infinite;
+}
+
+@keyframes gb-led-on { from { opacity: 0; } }
+
+@keyframes gb-led-pulse {
+  0% { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(2.4); }
 }
 
 /* LCD: dark inner bezel around the green glass. */
@@ -54,6 +67,88 @@
     transparent 0 2px,
     rgba(31, 31, 31, 0.06) 2px 3px
   );
+}
+
+/* Power-on: two shutters open from the centre, then a scan band sweeps down. */
+.gb-boot {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.gb-boot i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: var(--foreground);
+  transform: scaleY(0);
+  animation: gb-shutter 0.9s steps(9, end) 0.5s both;
+}
+
+.gb-boot i:first-child { top: 0; transform-origin: top; border-bottom: 3px solid #8b956d; }
+.gb-boot i:last-child { bottom: 0; transform-origin: bottom; border-top: 3px solid #8b956d; }
+
+.gb-boot::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 14%;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.28), transparent);
+  transform: translateY(-100%);
+  animation: gb-sweep 0.9s steps(12, end) 1.4s both;
+}
+
+@keyframes gb-shutter { from { transform: scaleY(1); } }
+@keyframes gb-sweep {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(800%); }
+}
+
+/* Static glass glare plus an occasional glint. */
+.gb-glare {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.gb-glare::before {
+  content: "";
+  position: absolute;
+  top: -10%;
+  left: 8%;
+  width: 16%;
+  height: 130%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 0 55%,
+    transparent 55% 70%,
+    rgba(255, 255, 255, 0.06) 70% 100%
+  );
+  transform: skewX(-18deg);
+}
+
+.gb-glare::after {
+  content: "";
+  position: absolute;
+  top: -10%;
+  left: 0;
+  width: 5%;
+  height: 130%;
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateX(-300%) skewX(-18deg);
+  animation: gb-glint 11s steps(30, end) 4s infinite;
+}
+
+@keyframes gb-glint {
+  0% { transform: translateX(-300%) skewX(-18deg); }
+  25%, 100% { transform: translateX(2200%) skewX(-18deg); }
 }
 
 @media (min-width: 640px) {
@@ -104,28 +199,214 @@
   to { transform: translateX(calc(-240 * var(--s))); }
 }
 
+/* Sun sets behind the hills and rises again; --s is one scene pixel. */
 .gb-sun {
   position: absolute;
   top: calc(5 * var(--s));
   right: calc(12 * var(--s));
+  animation: gb-sun-arc 48s steps(24, end) -6s infinite;
 }
 
-.gb-sun .gb-px { width: calc(10 * var(--s)); height: calc(8 * var(--s)); display: block; }
+@keyframes gb-sun-arc {
+  0%, 36% { transform: translateY(0); }
+  50%, 88% { transform: translateY(calc(40 * var(--s))); }
+  100% { transform: translateY(0); }
+}
 
-.gb-walker {
+/* A sprite sized in scene pixels. */
+.gb-spr { display: block; width: calc(var(--w) * var(--s)); height: calc(var(--h) * var(--s)); }
+.gb-spr svg { display: block; width: 100%; height: 100%; }
+
+/* Night: dim wash, moon, twinkling stars and fireflies fade in and out. */
+.gb-night {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  animation: gb-night 48s steps(8, end) -6s infinite;
+}
+
+@keyframes gb-night {
+  0%, 38% { opacity: 0; }
+  52%, 86% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.gb-dusk { position: absolute; inset: 0; background: rgba(31, 31, 31, 0.38); }
+.gb-moon { position: absolute; top: calc(5 * var(--s)); left: calc(20 * var(--s)); }
+
+.gb-stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(240 * var(--s));
+  height: calc(56 * var(--s));
+}
+
+.gb-twinkle-a { animation: gb-twinkle 2.4s steps(1, end) infinite; }
+.gb-twinkle-b { animation: gb-twinkle 2.4s steps(1, end) -1.2s infinite; }
+
+@keyframes gb-twinkle {
+  0%, 60% { opacity: 1; }
+  70%, 90% { opacity: 0.15; }
+}
+
+.gb-firefly {
+  position: absolute;
+  left: calc(var(--x) * var(--s));
+  top: calc(var(--y) * var(--s));
+  width: var(--s);
+  height: var(--s);
+  background: #dbe3bb;
+  opacity: 0;
+  animation: gb-firefly 5s steps(10, end) var(--delay) infinite;
+}
+
+@keyframes gb-firefly {
+  0% { opacity: 0; transform: translate(0, 0); }
+  25% { opacity: 1; transform: translate(calc(2 * var(--s)), calc(-1 * var(--s))); }
+  50% { opacity: 0.2; transform: translate(calc(3 * var(--s)), calc(-3 * var(--s))); }
+  75% { opacity: 1; transform: translate(calc(-1 * var(--s)), calc(-4 * var(--s))); }
+  100% { opacity: 0; transform: translate(0, 0); }
+}
+
+/* Full-width tracks carry critters across the scene. */
+.gb-track { position: absolute; left: 0; width: 100%; pointer-events: none; }
+
+.gb-bird-track {
+  top: 0;
+  height: calc(20 * var(--s));
+  animation: gb-bird-fly 26s steps(90, end) -5s infinite;
+}
+
+@keyframes gb-bird-fly {
+  0% { transform: translateX(calc(-24 * var(--s))); }
+  65%, 100% { transform: translateX(100%); }
+}
+
+.gb-bird {
+  position: absolute;
+  top: calc(var(--top) * var(--s));
+  left: 0;
+  width: calc(7 * var(--s));
+  height: calc(4 * var(--s));
+}
+
+.gb-bird-2 { left: calc(-9 * var(--s)); }
+.gb-bird .gb-spr { position: absolute; inset: 0; }
+.gb-flap-b { opacity: 0; animation: gb-frame-b 0.5s steps(1, end) infinite; }
+.gb-flap-a { animation: gb-frame-a 0.5s steps(1, end) infinite; }
+
+.gb-rabbit-track {
+  bottom: calc(4 * var(--s));
+  height: calc(8 * var(--s));
+  animation: gb-rabbit-run 30s steps(60, end) infinite;
+}
+
+@keyframes gb-rabbit-run {
+  0%, 30% { transform: translateX(0); }
+  60%, 100% { transform: translateX(calc(-100% - 14 * var(--s))); }
+}
+
+.gb-rabbit {
+  position: absolute;
+  left: 100%;
+  bottom: 0;
+  animation: gb-hop 0.6s steps(1, end) infinite;
+}
+
+@keyframes gb-hop {
+  0%, 85%, 100% { transform: translateY(0); }
+  20% { transform: translateY(calc(-2 * var(--s))); }
+  45% { transform: translateY(calc(-3 * var(--s))); }
+  70% { transform: translateY(calc(-1 * var(--s))); }
+}
+
+.gb-leaf {
+  position: absolute;
+  top: 0;
+  left: calc(var(--left) * 1%);
+  line-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  animation: gb-leaf var(--dur) steps(36, end) var(--delay) infinite;
+}
+
+@keyframes gb-leaf {
+  0% { opacity: 0; transform: translate(0, calc(-6 * var(--s))); }
+  8% { opacity: 1; }
+  25% { transform: translate(calc(-4 * var(--s)), calc(12 * var(--s))); }
+  50% { transform: translate(calc(2 * var(--s)), calc(30 * var(--s))); }
+  75% { transform: translate(calc(-5 * var(--s)), calc(46 * var(--s))); }
+  92% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-9 * var(--s)), calc(62 * var(--s))); }
+}
+
+/* ---- Walker: shadow + dust stay on the ground, the body hops and bobs ---- */
+.gb-walker-pos {
   position: absolute;
   left: calc(36 * var(--s));
   bottom: calc(5 * var(--s));
   width: calc(16 * var(--s));
   height: calc(20 * var(--s));
-  animation: gb-bob 0.6s steps(1, end) infinite;
 }
+
+.gb-walker-hop, .gb-walker { position: absolute; inset: 0; }
+.gb-walker-hop { animation: gb-jump 9s steps(1, end) infinite; }
+.gb-walker { animation: gb-bob 0.6s steps(1, end) infinite; }
 
 .gb-walker .gb-px {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+}
+
+.gb-shadow {
+  position: absolute;
+  left: calc(3 * var(--s));
+  bottom: calc(-1 * var(--s));
+  width: calc(10 * var(--s));
+  height: var(--s);
+  background: rgba(31, 31, 31, 0.35);
+  animation: gb-shadow 9s steps(1, end) infinite;
+}
+
+.gb-dust {
+  position: absolute;
+  bottom: 0;
+  left: calc(2 * var(--s));
+  width: var(--s);
+  height: var(--s);
+  background: #4d533c;
+  opacity: 0;
+  animation: gb-dust 0.6s steps(1, end) infinite;
+}
+
+.gb-dust-2 { left: 0; animation-delay: -0.3s; }
+
+@keyframes gb-jump {
+  0%, 88%, 98%, 100% { transform: translateY(0); }
+  90%, 96% { transform: translateY(calc(-3 * var(--s))); }
+  93% { transform: translateY(calc(-5 * var(--s))); }
+}
+
+@keyframes gb-jump-once {
+  0%, 100% { transform: translateY(0); }
+  20%, 80% { transform: translateY(calc(-3 * var(--s))); }
+  50% { transform: translateY(calc(-6 * var(--s))); }
+}
+
+@keyframes gb-shadow {
+  0%, 88%, 98%, 100% { transform: scaleX(1); }
+  90%, 96% { transform: scaleX(0.8); }
+  93% { transform: scaleX(0.6); }
+}
+
+@keyframes gb-dust {
+  0% { opacity: 1; transform: translate(0, 0); }
+  25% { opacity: 1; transform: translate(calc(-2 * var(--s)), calc(-1 * var(--s))); }
+  50%, 100% { opacity: 0; transform: translate(calc(-3 * var(--s)), calc(-2 * var(--s))); }
 }
 
 /* Static state keeps frame A only, so nothing stacks without motion. */
@@ -135,6 +416,13 @@
 @keyframes gb-frame-b { 0% { opacity: 0; } 50% { opacity: 1; } }
 @keyframes gb-frame-a { 0% { opacity: 1; } 50% { opacity: 0; } }
 @keyframes gb-bob { 50% { transform: translateY(calc(-1 * var(--s))); } }
+
+/* Console buttons drive the scene: A hops, B runs. */
+.gb-console[data-press="a"] .gb-walker-hop { animation: gb-jump-once 0.5s steps(1, end); }
+.gb-console[data-press="b"] .gb-walker,
+.gb-console[data-press="b"] .gb-frame-a,
+.gb-console[data-press="b"] .gb-frame-b,
+.gb-console[data-press="b"] .gb-dust { animation-duration: 0.3s; }
 
 /* ---- Layout ---- */
 .gb-grid {
@@ -161,6 +449,10 @@
 }
 
 .gb-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
   margin: 0;
   background: var(--foreground);
   color: var(--surface);
@@ -362,4 +654,94 @@
 @media (min-width: 640px) {
   .gb-controls { padding: 0 1.5rem; }
   .gb-speaker span { height: 52px; }
+}
+
+/* ---- Staggered pixel reveal ---- */
+.gb-reveal { animation: gb-pop 0.5s steps(4, end) calc(1.5s + var(--i, 0) * 0.15s) backwards; }
+.gb-fact { animation: gb-slide 0.4s steps(4, end) calc(1.8s + var(--i, 0) * 0.12s) backwards; }
+
+@keyframes gb-pop { from { opacity: 0; transform: translateY(16px); } }
+@keyframes gb-slide { from { opacity: 0; transform: translateX(-12px); } }
+
+/* Cards further down reveal as they scroll into view where supported. */
+@supports (animation-timeline: view()) {
+  .gb-reveal-scroll {
+    animation: gb-pop 1s steps(4, end) backwards;
+    animation-timeline: view();
+    animation-range: entry 0% entry 70%;
+  }
+}
+
+/* ---- Hover micro-interactions (transform only) ---- */
+.gb-panel, .gb-cart, .gb-portrait, .gb-chip, .gb-fact {
+  transition: transform 0.12s steps(3, end);
+}
+
+.gb-panel:hover, .gb-cart:hover { transform: translate(-2px, -2px); }
+.gb-portrait:hover { transform: translateY(-3px); }
+.gb-chip:hover { transform: translateY(-2px); }
+.gb-fact:hover { transform: translateX(6px); }
+.gb-cart-icon > svg:first-child { transition: transform 0.12s steps(3, end); }
+.gb-cart:hover .gb-cart-icon > svg:first-child { animation: gb-wiggle 0.5s steps(1, end) infinite; }
+
+@keyframes gb-wiggle {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: translateY(-3px) rotate(-5deg); }
+  75% { transform: translateY(-3px) rotate(5deg); }
+}
+
+/* ---- Header decorations ---- */
+.gb-hearts { display: flex; gap: 4px; }
+.gb-heart { display: block; line-height: 0; animation: gb-beat 1.6s steps(1, end) calc(var(--i) * 0.2s) infinite; }
+
+@keyframes gb-beat {
+  0%, 60%, 80%, 100% { transform: scale(1); }
+  70% { transform: scale(1.3); }
+}
+
+.gb-coin { display: block; line-height: 0; animation: gb-spin 1.2s steps(1, end) infinite; }
+
+@keyframes gb-spin {
+  0%, 100% { transform: scaleX(1); }
+  25%, 75% { transform: scaleX(0.6); }
+  50% { transform: scaleX(0.15); }
+}
+
+.gb-cart-icon { position: relative; }
+
+.gb-spark {
+  position: absolute;
+  line-height: 0;
+  opacity: 0;
+  animation: gb-spark 2.6s steps(1, end) infinite;
+}
+
+.gb-spark-1 { top: -10px; right: -12px; }
+.gb-spark-2 { bottom: -8px; left: -14px; animation-delay: -1.3s; }
+
+@keyframes gb-spark {
+  0%, 70%, 100% { opacity: 0; transform: scale(0.5); }
+  75%, 90% { opacity: 1; transform: scale(1); }
+  82% { opacity: 1; transform: scale(1.3); }
+}
+
+/* ---- Button presses ---- */
+.gb-btn, .gb-pill, .gb-dpad { transition: transform 0.08s steps(2, end); }
+
+.gb-btn[data-down="true"] { transform: translate(2px, 3px); background: #4d533c; color: #dbe3bb; }
+.gb-pill[data-down="true"] { transform: translate(1px, 3px); background: #4d533c; }
+
+.gb-dpad[data-dir="left"] { transform: perspective(160px) rotateY(-16deg); }
+.gb-dpad[data-dir="right"] { transform: perspective(160px) rotateY(16deg); }
+.gb-dpad[data-dir="up"] { transform: perspective(160px) rotateX(16deg); }
+.gb-dpad[data-dir="down"] { transform: perspective(160px) rotateX(-16deg); }
+
+.gb-console[data-press] .gb-speaker span {
+  animation: gb-vibe 0.16s steps(2, end) infinite;
+  animation-delay: calc(var(--i, 0) * 30ms);
+}
+
+@keyframes gb-vibe {
+  0%, 100% { transform: rotate(-20deg) translateY(0); }
+  50% { transform: rotate(-20deg) translateY(-3px); }
 }

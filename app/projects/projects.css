@@ -473,3 +473,181 @@
   font-size: 1.05rem;
   line-height: 1.3;
 }
+
+/* ================= Livelier map: sun, sky traffic, markers, motion =================
+   Everything below animates transform/opacity only, in steps() for a pixel feel.
+   globals.css switches every animation off under prefers-reduced-motion. */
+
+.sun {
+  position: absolute;
+  top: 8px;
+  right: 6%;
+  width: 160px;
+  height: 160px;
+}
+.sun-rays { position: absolute; inset: 0; }
+.sun-rays path { fill: #ffd84a; }
+.sun-disc {
+  position: absolute;
+  left: 56px;
+  top: 56px;
+  animation: sun-pulse 3s steps(1, end) infinite;
+}
+.rays-a { animation: flap-a 1.6s steps(1, end) infinite; }
+.rays-b { visibility: hidden; animation: flap-b 1.6s steps(1, end) infinite; }
+@keyframes sun-pulse { 50% { transform: scale(1.04); } }
+
+.cloud-far { opacity: 0.55; }
+.airship-bob { display: block; animation: bob 3s steps(2, end) infinite; }
+.flock-bob {
+  display: block;
+  position: relative;
+  width: 130px;
+  height: 100px;
+  animation: bob 1.2s steps(2, end) infinite;
+}
+
+.glint {
+  position: absolute;
+  opacity: 0;
+  animation: twinkle 2.4s steps(1, end) infinite;
+}
+@keyframes twinkle {
+  0% { opacity: 0; transform: scale(0.6); }
+  35% { opacity: 1; transform: scale(1); }
+  60% { opacity: 1; transform: scale(1.3); }
+  80% { opacity: 0; transform: scale(0.6); }
+}
+
+/* Two frames of one sprite, swapped in steps (flags, pennants). */
+.swap { display: inline-grid; line-height: 0; }
+.swap > svg { grid-area: 1 / 1; animation-delay: var(--d, 0s); }
+.swap-a { animation: flap-a 0.7s steps(1, end) infinite; }
+.swap-b { visibility: hidden; animation: flap-b 0.7s steps(1, end) infinite; }
+
+.marker-wrap { position: relative; display: inline-block; line-height: 0; }
+.pennant { position: absolute; top: 0; }
+
+.smoke { position: absolute; top: 0; width: 0; height: 0; }
+.smoke-puff {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  opacity: 0;
+  animation: puff 2.7s steps(6, end) infinite;
+}
+@keyframes puff {
+  0% { opacity: 0.95; transform: translate(0, 0) scale(0.5); }
+  100% { opacity: 0; transform: translate(14px, -64px) scale(1.3); }
+}
+
+.flower { transform-origin: 50% 100%; animation: sway 2s steps(1, end) infinite; }
+@keyframes sway { 50% { transform: rotate(7deg); } }
+
+/* Level badges pulse so the next stop catches the eye. */
+.stop-label { animation: badge-pulse 2.8s steps(1, end) infinite; }
+@keyframes badge-pulse {
+  0%, 78% { transform: scale(1); }
+  86% { transform: scale(1.12); }
+  94% { transform: scale(1.04); }
+}
+.level-stamp { animation: stamp-pulse 3.2s steps(1, end) infinite; }
+@keyframes stamp-pulse {
+  0%, 80% { transform: rotate(-3deg) scale(1); }
+  88% { transform: rotate(-3deg) scale(1.12); }
+  95% { transform: rotate(-3deg) scale(1.04); }
+}
+.hello { animation: nudge 1.6s steps(1, end) infinite; }
+@keyframes nudge { 50% { transform: translateX(-3px); } }
+
+/* Levels slide in as they scroll into view (browsers without scroll timelines skip it). */
+@supports (animation-timeline: view()) {
+  .level-card,
+  .stop-marker,
+  .stop-deco {
+    animation-duration: auto;
+    animation-timing-function: steps(8, end);
+    animation-fill-mode: backwards;
+    animation-timeline: view();
+    animation-range: entry 0% entry 55%;
+  }
+  .level-card { animation-name: rise-in; }
+  .stop-marker,
+  .stop-deco { animation-name: pop-in; }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translate(var(--from-x, 0), 40px); }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.6); }
+}
+
+/* Hover lift with a deeper pixel shadow. */
+@media (hover: hover) {
+  .level-card { transition: transform 0.18s steps(3, end); }
+  .level-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0 var(--tone);
+  }
+}
+
+/* The hero walks each winding stretch of trail (desktop). */
+.walker {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: calc(50% - 44px);
+  width: 0;
+  height: 0;
+  animation: walk 8s steps(1, end) infinite;
+}
+.bend { position: relative; }
+.walker-sprite { display: block; animation: bob 0.72s steps(1, end) infinite; }
+@keyframes walk {
+  0% { opacity: 1; transform: translate(36px, -36px); }
+  4.5% { opacity: 1; transform: translate(44px, -28px); }
+  9% { opacity: 1; transform: translate(52px, -20px); }
+  13.5% { opacity: 1; transform: translate(60px, -12px); }
+  18% { opacity: 1; transform: translate(60px, -4px); }
+  22.5% { opacity: 1; transform: translate(60px, 4px); }
+  27% { opacity: 1; transform: translate(52px, 12px); }
+  31.5% { opacity: 1; transform: translate(44px, 20px); }
+  36% { opacity: 1; transform: translate(36px, 28px); }
+  40.5% { opacity: 1; transform: translate(20px, 36px); }
+  45% { opacity: 1; transform: translate(12px, 44px); }
+  49.5% { opacity: 1; transform: translate(4px, 52px); }
+  54% { opacity: 1; transform: translate(-4px, 60px); }
+  58.5% { opacity: 1; transform: translate(-4px, 68px); }
+  63% { opacity: 1; transform: translate(-4px, 76px); }
+  67.5% { opacity: 1; transform: translate(4px, 84px); }
+  72% { opacity: 1; transform: translate(12px, 92px); }
+  76.5% { opacity: 1; transform: translate(20px, 100px); }
+  81% { opacity: 0; transform: translate(28px, 108px); }
+  100% { opacity: 0; transform: translate(28px, 108px); }
+}
+
+@media (min-width: 900px) {
+  .walker { display: block; }
+  .stop-left .level-card { --from-x: -48px; }
+  .stop-right .level-card { --from-x: 48px; }
+}
+
+/* Screenshot gallery: swaps fade and slide in, the enlarged view pops open. */
+.shots-swap { animation: shot-in 0.3s steps(5, end) both; }
+@keyframes shot-in {
+  from { opacity: 0; transform: translateX(12px); }
+}
+.shots-tab,
+.shots-thumb { transition: transform 0.12s steps(2, end); }
+.shots-tab:hover,
+.shots-thumb:hover { transform: translate(-1px, -1px); }
+.shots-tab:active { transform: translate(1px, 1px); }
+
+.shots-dialog[open] { animation: dialog-in 0.28s steps(6, end) both; }
+.shots-dialog[open]::backdrop { animation: fade-in 0.28s steps(4, end) both; }
+@keyframes dialog-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.94); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+}

@@ -1,9 +1,11 @@
 import type { ReactNode } from "react";
 import "./scene.css";
 import { toRuns } from "./PixelSprite";
-import { CLOUD, PALM } from "./sceneArt";
-import { blimp, cars, lamps, steam, walkers } from "./SceneActors";
+import { CLOUD, CLOUD_SMALL, PALM } from "./sceneArt";
+import { blimp, cars, dogs, lamps, steam, walkers } from "./SceneActors";
 import { SceneAvatar } from "./SceneAvatar";
+import { birds, bolt, farBlimp, signs, splashes } from "./SceneExtras";
+import { ScenePointer } from "./ScenePointer";
 import { mergeRects } from "./svgMerge";
 import type { Sprite } from "./sprites";
 
@@ -28,6 +30,7 @@ const LIGHTS = ["#ffc15a", "#ff9ec7", "#4de8f0"] as const;
 const RAIN_PERIOD = 30;
 const SIDEWALK = 10;
 const WALK_FEET = 155;
+const PAD = 12;
 
 type Building = { x: number; w: number; h: number };
 
@@ -116,7 +119,10 @@ function sky(): ReactNode[] {
       upper.push(rect(`dither-a-${i}-${x}`, x, top - 1, 1, 1, color));
       lower.push(rect(`dither-b-${i}-${x}`, x + 1, top, 1, 1, above));
     }
-    nodes.push(...mergeRects(upper, `da-${i}`), ...mergeRects(lower, `db-${i}`));
+    nodes.push(
+      ...mergeRects(upper, `da-${i}`),
+      ...mergeRects(lower, `db-${i}`),
+    );
   });
   return nodes;
 }
@@ -164,7 +170,19 @@ function windows(
     for (let x = building.x + 2; x < building.x + building.w - 2; x += 4) {
       if (random() > litRate) continue;
       const color = LIGHTS[Math.floor(random() * LIGHTS.length)];
-      const blinks = random() < 0.1;
+      const roll = random();
+      // A few windows twinkle, a few more switch off and on now and then.
+      const className =
+        roll < 0.08 ? "scene-twinkle" : roll < 0.2 ? "scene-toggle" : undefined;
+      const style = className
+        ? {
+            animationDelay: `${-((x * 7 + y * 3) % 23)}s`,
+            animationDuration:
+              className === "scene-toggle"
+                ? `${7 + ((x + y) % 9)}s`
+                : undefined,
+          }
+        : undefined;
       nodes.push(
         <rect
           key={`${id}-w-${x}-${y}`}
@@ -173,8 +191,8 @@ function windows(
           width={2}
           height={2}
           fill={color}
-          className={blinks ? "scene-twinkle" : undefined}
-          style={blinks ? { animationDelay: `${(x * 7) % 20 / 10}s` } : undefined}
+          className={className}
+          style={style}
         />,
       );
     }
@@ -212,7 +230,16 @@ function buildings(
       // Neon trim along the roofline.
       const trim = LIGHTS[Math.floor(random() * LIGHTS.length)];
       nodes.push(
-        rect(`${id}-n-${i}`, building.x, top, building.w, 1, trim, 0.9, "scene-flicker"),
+        rect(
+          `${id}-n-${i}`,
+          building.x,
+          top,
+          building.w,
+          1,
+          trim,
+          0.9,
+          "scene-flicker",
+        ),
       );
     }
     return nodes;
@@ -224,7 +251,14 @@ function street(): ReactNode[] {
     rect("walk", 0, GROUND, WIDTH, SIDEWALK, "#3a1c5e"),
     rect("walk-edge", 0, GROUND, WIDTH, 1, "#6a2f7a"),
     rect("walk-lip", 0, GROUND + SIDEWALK - 1, WIDTH, 1, "#2a1450"),
-    rect("road", 0, GROUND + SIDEWALK, WIDTH, HEIGHT - GROUND - SIDEWALK, "#120a24"),
+    rect(
+      "road",
+      0,
+      GROUND + SIDEWALK,
+      WIDTH,
+      HEIGHT - GROUND - SIDEWALK,
+      "#120a24",
+    ),
   ];
   for (let x = 6; x < WIDTH; x += 16) {
     nodes.push(rect(`tile-${x}`, x, GROUND + 1, 1, SIDEWALK - 2, "#2a1450"));
@@ -251,19 +285,40 @@ function rain(random: () => number): ReactNode[] {
   });
 }
 
+// Extra wall at both ends so the parallax shift never shows a gap.
+function edgePad(
+  list: readonly Building[],
+  base: number,
+  fill: string,
+): ReactNode[] {
+  const first = list[0];
+  const last = list[list.length - 1];
+  return [
+    rect("pad-l", -PAD, base - first.h, PAD, first.h, fill),
+    rect("pad-r", WIDTH, base - last.h, PAD, last.h, fill),
+  ];
+}
+
 const random = seeded(2026);
+const starNodes = mergeRects(stars(random), "stars");
+const farList = skyline(random, 8, 10, 10, 18);
+const farNodes = buildings("far", random, farList, HORIZON, "#2b1650", 0.18);
+const nearList = skyline(random, 14, 12, 26, 26);
+const nearNodes = buildings("near", random, nearList, GROUND, "#150a2b", 0.26);
 const SCENE = {
   sky: sky(),
   sun: mergeRects(sun(), "sun"),
-  stars: mergeRects(stars(random), "stars"),
+  stars: starNodes,
   far: mergeRects(
-    buildings("far", random, skyline(random, 8, 10, 10, 18), HORIZON, "#2b1650", 0.18),
+    [...edgePad(farList, HORIZON, "#2b1650"), ...farNodes],
     "far",
   ),
   near: mergeRects(
-    buildings("near", random, skyline(random, 14, 12, 26, 26), GROUND, "#150a2b", 0.26),
+    [...edgePad(nearList, GROUND, "#150a2b"), ...nearNodes],
     "near",
   ),
+  signs: signs(nearList, GROUND),
+  splashes: splashes(),
   // The manhole sits on the road, so it is drawn after the merged street layer.
   street: [
     ...mergeRects(street(), "street"),
@@ -275,6 +330,7 @@ const SCENE = {
 export function HeroScene() {
   return (
     <div className="hero-scene absolute inset-x-0 bottom-0 overflow-hidden">
+      <ScenePointer />
       <svg
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
         preserveAspectRatio="xMidYMax slice"
@@ -288,40 +344,82 @@ export function HeroScene() {
         </defs>
         <g aria-hidden pointerEvents="none">
           {SCENE.sky}
-          {SCENE.stars}
-          <g clipPath="url(#sun-clip)">
-            <g className="scene-sun">{SCENE.sun}</g>
-          </g>
-          <g className="scene-cloud">
-            {mergeRects(spriteRects("cloud-a", CLOUD, 20, 34), "cloud-a")}
-          </g>
-          <g className="scene-cloud scene-cloud-slow">
-            {mergeRects(spriteRects("cloud-b", CLOUD, 150, 56), "cloud-b")}
+          <g className="scene-par scene-par-sky">
+            {SCENE.stars}
+            <g clipPath="url(#sun-clip)">
+              <g className="scene-sun">{SCENE.sun}</g>
+            </g>
+            {bolt()}
+            <g className="scene-cloud">
+              {mergeRects(spriteRects("cloud-a", CLOUD, 20, 34), "cloud-a")}
+            </g>
+            <g className="scene-cloud scene-cloud-slow">
+              {mergeRects(spriteRects("cloud-b", CLOUD, 150, 56), "cloud-b")}
+            </g>
+            <g className="scene-cloud scene-cloud-mid">
+              {mergeRects(
+                spriteRects("cloud-c", CLOUD_SMALL, 90, 14),
+                "cloud-c",
+              )}
+            </g>
           </g>
           {/* The sky dims as the sun goes down. */}
-          <rect width={WIDTH} height={GROUND} fill="#0d0221" className="scene-dim" />
+          <rect
+            width={WIDTH}
+            height={GROUND}
+            fill="#0d0221"
+            className="scene-dim"
+          />
+          {farBlimp()}
           {blimp()}
-          {SCENE.far}
-          {SCENE.near}
+          {birds()}
+          <g className="scene-par scene-par-far">{SCENE.far}</g>
+          <g className="scene-par scene-par-near">
+            {SCENE.near}
+            {SCENE.signs}
+          </g>
           {lamps()}
           {SCENE.street}
+          {SCENE.splashes}
           {steam()}
           {cars()}
           {walkers()}
+          {dogs()}
         </g>
         <SceneAvatar startX={190} feet={WALK_FEET} />
         <g aria-hidden pointerEvents="none">
-          {mergeRects(spriteRects("palm-l", PALM, 14, GROUND - PALM.rows.length + 3), "palm-l")}
-          {mergeRects(spriteRects("palm-r", PALM, 292, GROUND - PALM.rows.length + 3), "palm-r")}
+          <g className="scene-par scene-par-front">
+            {mergeRects(
+              spriteRects("palm-l", PALM, 14, GROUND - PALM.rows.length + 3),
+              "palm-l",
+            )}
+            {mergeRects(
+              spriteRects("palm-r", PALM, 292, GROUND - PALM.rows.length + 3),
+              "palm-r",
+            )}
+          </g>
           <g className="scene-rain scene-rain-a">{SCENE.rain}</g>
-          <rect width={WIDTH} height={HEIGHT} fill="#d9ccff" className="scene-flash" />
+          <rect
+            width={WIDTH}
+            height={HEIGHT}
+            fill="#d9ccff"
+            className="scene-flash"
+          />
           {/* The top edge dithers into the page background so no seam shows. */}
           {[1, 0.75, 0.5, 0.25].map((opacity, i) =>
             rect(`fade-${i}`, 0, i * 4, WIDTH, 4, "#120a2e", opacity),
           )}
           {/* The street dithers into the page background so the hero has no hard edge. */}
           {[0.2, 0.45, 0.7, 0.9, 1].map((opacity, i) =>
-            rect(`foot-${i}`, 0, HEIGHT - 20 + i * 4, WIDTH, 4, "#120a2e", opacity),
+            rect(
+              `foot-${i}`,
+              0,
+              HEIGHT - 20 + i * 4,
+              WIDTH,
+              4,
+              "#120a2e",
+              opacity,
+            ),
           )}
           {/* Stepped scrim keeps the headline readable over the sunset. */}
           {[0.35, 0.25, 0.15, 0.08].map((opacity, i) =>

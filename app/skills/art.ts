@@ -144,8 +144,8 @@ export type Ember = {
   hot: boolean;
 };
 
-export function makeEmbers(count: number): Ember[] {
-  let seed = 7;
+export function makeEmbers(count: number, startSeed = 7): Ember[] {
+  let seed = startSeed;
   const next = () => {
     seed = (seed * 48271) % 2147483647;
     return seed / 2147483647;
@@ -160,3 +160,72 @@ export function makeEmbers(count: number): Ember[] {
     hot: next() > 0.45,
   }));
 }
+
+// Loot that pops out of an open chest. "T" reads --tone from the nearest .tone-* class.
+export const COIN: Sprite = {
+  rows: [".ooo.", "oYyyo", "oyYyo", "oyyyo", ".ooo."],
+  palette: { o: "#7a4a14", y: "#ffc447", Y: "#fff2a8" },
+};
+
+export const GEM: Sprite = {
+  rows: [".oooo.", "oWTTTo", "oTTTTo", ".oTTo.", "..oo.."],
+  palette: { o: "#120b0a", W: "#ffffff", T: "var(--tone)" },
+};
+
+// Wall runes: "r" takes the CSS colour of the wrapper, so one glyph can glow any hue.
+const RUNE_PALETTE = { r: "currentColor" };
+
+export const RUNES: readonly Sprite[] = [
+  {
+    rows: [
+      "...r...",
+      "..rr...",
+      ".r.r.r.",
+      "...rrrr",
+      "...r.r.",
+      "..r..r.",
+      "..r....",
+    ],
+    palette: RUNE_PALETTE,
+  },
+  {
+    rows: [
+      "rrrrrrr",
+      "r..r..r",
+      ".r.r.r.",
+      "..rrr..",
+      "...r...",
+      "...r...",
+      "..rrr..",
+    ],
+    palette: RUNE_PALETTE,
+  },
+  {
+    rows: [
+      "..rrr..",
+      ".r...r.",
+      "r..r..r",
+      "r.rrr.r",
+      "r..r..r",
+      ".r...r.",
+      "..rrr..",
+    ],
+    palette: RUNE_PALETTE,
+  },
+];
+
+// Cobweb for a top-left corner; mirrored in CSS for the right.
+export const COBWEB: Sprite = {
+  rows: [
+    "wwwwwwwwww",
+    "wwwww.w...",
+    "ww.w.w....",
+    "w.w.ww....",
+    "ww..w.w...",
+    "ww..w..w..",
+    "w...w...w.",
+    "w...w....w",
+    "w....",
+  ].map((row) => row.padEnd(10, ".")),
+  palette: { w: "#b8b0d4" },
+};

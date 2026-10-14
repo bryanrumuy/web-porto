@@ -1,0 +1,375 @@
+/* Chests: staggered entrance, idle bob, and a rich open sequence on hover or focus. */
+.chest {
+  animation: chest-in 0.7s steps(7, end) calc(var(--n, 0) * 150ms + 120ms)
+    backwards;
+}
+
+@keyframes chest-in {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  45% {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stage: closed and open frames share one box, so opening is a frame swap. */
+.chest-art {
+  position: relative;
+  height: 8.5rem;
+  margin-top: 0.75rem;
+  overflow: clip;
+}
+
+.chest-art::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 10.5rem;
+  height: 8px;
+  margin-left: -5.25rem;
+  background: #4a3b5c;
+  box-shadow: 0 -4px 0 #3b2f4d;
+}
+
+.chest-body {
+  position: absolute;
+  inset: 0;
+  animation: chest-idle 2.8s steps(1, end) infinite;
+}
+
+.chest-body > svg {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  margin-left: -64px;
+}
+
+.chest-open {
+  opacity: 0;
+}
+
+@keyframes chest-idle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+.chest-glow {
+  position: absolute;
+  left: 50%;
+  bottom: -40px;
+  width: 240px;
+  height: 200px;
+  margin-left: -120px;
+  opacity: 0;
+  background: radial-gradient(
+    ellipse at 50% 60%,
+    rgb(255 214 110 / 0.6) 0%,
+    rgb(255 180 60 / 0.22) 45%,
+    transparent 70%
+  );
+}
+
+/* Light beam rising out of the lid. */
+.chest-beam {
+  position: absolute;
+  left: 50%;
+  bottom: 60px;
+  width: 80px;
+  height: 120px;
+  margin-left: -40px;
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  clip-path: polygon(34% 100%, 66% 100%, 100% 0, 0 0);
+  background: linear-gradient(
+    to top,
+    rgb(255 236 160 / 0.7),
+    rgb(255 214 110 / 0.12)
+  );
+}
+
+.spark {
+  position: absolute;
+  bottom: 56px;
+  width: 4px;
+  height: 4px;
+  background: #fff2a8;
+  opacity: 0;
+}
+
+.spark-1 {
+  left: 45%;
+}
+.spark-2 {
+  left: 51%;
+  animation-delay: 0.3s;
+}
+.spark-3 {
+  left: 57%;
+  animation-delay: 0.6s;
+}
+
+/* Loot: one coin or gem per skill, fanning out of the chest when it opens. */
+.loot {
+  position: absolute;
+  bottom: 62px;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  opacity: 0;
+}
+
+.loot > svg {
+  display: block;
+}
+
+.chest:hover .chest-closed,
+.chest:focus-within .chest-closed {
+  opacity: 0;
+}
+
+.chest:hover .chest-open,
+.chest:focus-within .chest-open {
+  opacity: 1;
+}
+
+.chest:hover .chest-body,
+.chest:focus-within .chest-body {
+  animation:
+    chest-hop 0.5s steps(5, end),
+    chest-bob 1.6s steps(1, end) 0.5s infinite;
+}
+
+.chest:hover .chest-glow,
+.chest:focus-within .chest-glow {
+  opacity: 1;
+  animation: glow-pulse 1.2s steps(3, end) infinite;
+}
+
+.chest:hover .chest-beam,
+.chest:focus-within .chest-beam {
+  animation:
+    beam-in 0.4s steps(4, end) both,
+    beam-shimmer 1s steps(2, end) 0.4s infinite;
+}
+
+.chest:hover .spark,
+.chest:focus-within .spark {
+  animation: spark 1.2s steps(6, end) infinite;
+}
+
+.chest:hover .spark-2,
+.chest:focus-within .spark-2 {
+  animation-delay: 0.3s;
+}
+.chest:hover .spark-3,
+.chest:focus-within .spark-3 {
+  animation-delay: 0.6s;
+}
+
+.chest:hover .loot,
+.chest:focus-within .loot {
+  animation: loot-pop 1.6s steps(10, end) calc(0.25s + var(--ld, 0s)) both;
+}
+
+@keyframes chest-hop {
+  0% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-12px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes chest-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes beam-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes beam-shimmer {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+
+@keyframes spark {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-48px);
+    opacity: 0;
+  }
+}
+
+@keyframes loot-pop {
+  0% {
+    transform: translate(0, 0) scale(0.4);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  45% {
+    transform: translate(calc(var(--lx) * 0.75), var(--ly)) scale(1);
+    opacity: 1;
+  }
+  80% {
+    transform: translate(var(--lx), calc(var(--ly) + 26px)) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--lx), calc(var(--ly) + 30px)) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Dripping water: a drop falls from the plank and splashes on the floor stone. */
+.drip,
+.splash {
+  position: absolute;
+  left: var(--dx);
+  opacity: 0;
+}
+
+.drip {
+  top: 0;
+  width: 4px;
+  height: 8px;
+  background: #7fd4ff;
+  animation: drip var(--dd) steps(14, end) infinite;
+}
+
+.splash {
+  bottom: 8px;
+  width: 12px;
+  height: 4px;
+  margin-left: -4px;
+  background: #7fd4ff;
+  animation: splash var(--dd) steps(14, end) infinite;
+}
+
+@keyframes drip {
+  0%,
+  20% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  24% {
+    opacity: 1;
+  }
+  44% {
+    transform: translateY(116px);
+    opacity: 1;
+  }
+  45%,
+  100% {
+    transform: translateY(116px);
+    opacity: 0;
+  }
+}
+
+@keyframes splash {
+  0%,
+  43% {
+    transform: scaleX(0.3);
+    opacity: 0;
+  }
+  44% {
+    transform: scaleX(0.5);
+    opacity: 0.9;
+  }
+  60%,
+  100% {
+    transform: scaleX(1.5);
+    opacity: 0;
+  }
+}
+
+/* Inventory: each chip gets a twinkle and a nudge when its chest opens. */
+.slot {
+  position: relative;
+  transition: transform 0.12s steps(2, end);
+}
+
+.slot:hover,
+.slot:focus-visible {
+  transform: translateX(4px);
+}
+
+.slot::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 4px;
+  height: 4px;
+  background: #fff2a8;
+  opacity: 0;
+}
+
+.chest:hover .slot::after,
+.chest:focus-within .slot::after {
+  animation: twinkle 1.6s steps(4, end) calc(0.35s + var(--i, 0) * 0.18s)
+    infinite;
+}
+
+@keyframes twinkle {
+  0%,
+  60%,
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  30% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+}

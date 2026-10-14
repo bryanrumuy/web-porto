@@ -1,8 +1,12 @@
 import type { CSSProperties } from "react";
-import { PixelSprite } from "../components/PixelSprite";
 import {
   CLOUDS,
+  CLOUDS_NEAR,
   FAR_HILLS,
+  FLOWER_BLOOMS,
+  FLOWER_STEMS,
+  FOREGROUND_DARK,
+  FOREGROUND_MID,
   GROUND_EDGE,
   GROUND_TEXTURE,
   MID_HILLS,
@@ -10,14 +14,12 @@ import {
   SHADE_0,
   SHADE_1,
   SHADE_2,
-  SUN,
   TILE,
   TREES,
   TUFTS,
-  WALK_A,
-  WALK_B,
   type Rect,
 } from "./art";
+import { Birds, Leaves, Night, Rabbit, Sun, Walker } from "./SceneActors";
 
 type LayerProps = {
   duration: number;
@@ -53,7 +55,7 @@ function Layer({ duration, groups }: LayerProps) {
   );
 }
 
-/** The LCD diorama: four parallax layers, a sun and a walking avatar. */
+/** The LCD diorama: parallax layers, a day/night cycle, critters and a walking avatar. */
 export function LcdScene() {
   return (
     <div
@@ -61,11 +63,11 @@ export function LcdScene() {
       role="img"
       aria-label="Pixel scene: Bryan walking through green hills and pine trees"
     >
-      <div className="gb-sun" aria-hidden>
-        <PixelSprite sprite={SUN} scale={1} className="gb-px" />
-      </div>
+      <Sun />
       <Layer duration={90} groups={[{ rects: CLOUDS, fill: SHADE_2 }]} />
+      <Layer duration={55} groups={[{ rects: CLOUDS_NEAR, fill: SHADE_2 }]} />
       <Layer duration={150} groups={[{ rects: FAR_HILLS, fill: SHADE_2 }]} />
+      <Birds />
       <Layer
         duration={80}
         groups={[
@@ -80,13 +82,21 @@ export function LcdScene() {
           { rects: GROUND_TEXTURE, fill: SHADE_1 },
           { rects: GROUND_EDGE, fill: SHADE_0 },
           { rects: TUFTS, fill: SHADE_1 },
+          { rects: FLOWER_STEMS, fill: SHADE_1 },
+          { rects: FLOWER_BLOOMS, fill: SHADE_0 },
         ]}
       />
-      <div className="gb-walker" aria-hidden>
-        <PixelSprite sprite={WALK_A} scale={1} className="gb-px gb-frame-a" />
-        <PixelSprite sprite={WALK_B} scale={1} className="gb-px gb-frame-b" />
-      </div>
+      <Night />
+      <Rabbit />
+      <Walker />
+      <Layer
+        duration={14}
+        groups={[
+          { rects: FOREGROUND_DARK, fill: SHADE_0 },
+          { rects: FOREGROUND_MID, fill: SHADE_1 },
+        ]}
+      />
+      <Leaves />
     </div>
   );
 }
-

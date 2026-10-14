@@ -59,3 +59,134 @@ export const JOYSTICK: Sprite = {
     "OOOOOOOOOOOOO",
   ],
 };
+
+// ---------- Room decor (tinted through currentColor or theme variables) ----------
+
+const TINT = { C: "currentColor" } as const;
+
+export const BOLT: Sprite = {
+  palette: TINT,
+  rows: [
+    "....CCC",
+    "...CCC.",
+    "..CCC..",
+    ".CCCCCC",
+    "...CCC.",
+    "..CC...",
+    ".CC....",
+    "CC.....",
+  ],
+};
+
+export const SPARK: Sprite = {
+  palette: TINT,
+  rows: ["..C..", ".CCC.", "CCCCC", ".CCC.", "..C.."],
+};
+
+export const ARROW_DOWN: Sprite = {
+  palette: TINT,
+  rows: ["CCCCCCC", ".CCCCC.", "..CCC..", "...C..."],
+};
+
+export const CHOMP_OPEN: Sprite = {
+  palette: TINT,
+  rows: [
+    "..CCCCC..",
+    ".CCCCCCC.",
+    "CCCCCCC..",
+    "CCCCCC...",
+    "CCCCC....",
+    "CCCCCC...",
+    "CCCCCCC..",
+    ".CCCCCCC.",
+    "..CCCCC..",
+  ],
+};
+
+export const CHOMP_SHUT: Sprite = {
+  palette: TINT,
+  rows: [
+    "..CCCCC..",
+    ".CCCCCCC.",
+    "CCCCCCCCC",
+    "CCCCCCCCC",
+    "CCCCCCCCC",
+    "CCCCCCCCC",
+    "CCCCCCCCC",
+    ".CCCCCCC.",
+    "..CCCCC..",
+  ],
+};
+
+export const GHOST: Sprite = {
+  palette: { C: "currentColor", W: "#ffffff", K: INK },
+  rows: [
+    "..CCCCC..",
+    ".CCCCCCC.",
+    "CCCCCCCCC",
+    "CWWCCWWCC",
+    "CWKCCWKCC",
+    "CCCCCCCCC",
+    "CCCCCCCCC",
+    "CCCCCCCCC",
+    "CC.CCC.CC",
+  ],
+};
+
+export const POSTER: Sprite = {
+  palette: { O: INK, D: "#2a1060", C: "currentColor", W: "#ffffff" },
+  rows: [
+    "OOOOOOOOOO",
+    "ODDDDDDDDO",
+    "ODWDCCDDDO",
+    "ODDCCCCDDO",
+    "ODCCCCCCDO",
+    "ODCWCCWCDO",
+    "ODCCCCCCDO",
+    "ODCDCCDCDO",
+    "ODDDDDDWDO",
+    "ODWDDDDDDO",
+    "OOOOOOOOOO",
+  ],
+};
+
+const MACHINE_ROWS = [
+  "..OOOOOOOOOO..",
+  ".OMMMMMMMMMMO.",
+  ".OOOOOOOOOOOO.",
+  "OBBBBBBBBBBBBO",
+  "OBOOOOOOOOOOBO",
+  "OBOSSSSSSSSOBO",
+  "OBOSSGSSGSSOBO",
+  "OBOSSSGGSSSOBO",
+  "OBOSSGSSGSSOBO",
+  "OBOOOOOOOOOOBO",
+  "OLLLLLLLLLLLLO",
+  "OBBPBBBBBBABBO",
+  "OBBBBBBBBBBBBO",
+  "OBBBBBBBBBBBBO",
+  "OBBOOOOOOOOBBO",
+  "OBBOKKKKKKOBBO",
+  "OBBOOOOOOOOBBO",
+  "OBBBBBBBBBBBBO",
+  "OBBBBBBBBBBBBO",
+  "OOOOOOOOOOOOOO",
+] as const;
+
+/** A background cabinet: marquee and screen take the given theme colours. */
+export function makeMachine(marquee: string, screen: string): Sprite {
+  return {
+    rows: MACHINE_ROWS,
+    palette: {
+      O: INK,
+      B: "#3a1a78",
+      L: "#5a2f8a",
+      M: marquee,
+      S: "#150a35",
+      G: screen,
+      P: "#ff4fd8",
+      A: "#4de8f0",
+      K: "#ffc15a",
+    },
+  };
+}

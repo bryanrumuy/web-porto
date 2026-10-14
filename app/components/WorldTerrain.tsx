@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { toRuns } from "./PixelSprite";
 import { CLOUD } from "./sceneArt";
 import type { Sprite } from "./sprites";
@@ -56,6 +56,9 @@ const SKY_BANDS = ["#1a0d3a", "#261052", "#35165a", "#4b1c68"] as const;
 const ROAD_EDGE = "#4a3a7a";
 const ROAD_FILL = "#26223d";
 const PLAZA = "#2f2a52";
+const CAR_COLORS = ["#ff4fd8", "#4de8f0", "#ffc15a", "#ff6fb5"] as const;
+const CAR_PACE = 0.32;
+const CAR_LIGHT = "#ffe9a8";
 
 function seeded(seed: number): () => number {
   let state = seed;
@@ -94,7 +97,14 @@ function rect(
 function sprite(id: string, art: Sprite, x: number, y: number): ReactNode[] {
   return art.rows.flatMap((row, dy) =>
     toRuns(row).map((run) =>
-      rect(`${id}-${dy}-${run.x}`, x + run.x, y + dy, run.length, 1, art.palette[run.key]),
+      rect(
+        `${id}-${dy}-${run.x}`,
+        x + run.x,
+        y + dy,
+        run.length,
+        1,
+        art.palette[run.key],
+      ),
     ),
   );
 }
@@ -107,7 +117,10 @@ function distanceToSegment(
 ): number {
   const dx = bx - ax;
   const dy = by - ay;
-  const t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)));
+  const t = Math.max(
+    0,
+    Math.min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)),
+  );
   return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
 }
 
@@ -129,7 +142,16 @@ function buildLayout(layout: Layout): ReactNode {
   // Night sky with stars, a crescent moon and a far skyline.
   SKY_BANDS.forEach((color, i) => {
     const top = Math.round((skyBottom / SKY_BANDS.length) * i);
-    nodes.push(rect(`${id}-sky-${i}`, 0, top, width, Math.ceil(skyBottom / SKY_BANDS.length) + 1, color));
+    nodes.push(
+      rect(
+        `${id}-sky-${i}`,
+        0,
+        top,
+        width,
+        Math.ceil(skyBottom / SKY_BANDS.length) + 1,
+        color,
+      ),
+    );
   });
   for (let i = 0; i < 26; i++) {
     nodes.push(
@@ -149,12 +171,21 @@ function buildLayout(layout: Layout): ReactNode {
   nodes.push(rect(`${id}-moon-a`, width - 22, 3, 7, 7, "#fff4e0"));
   nodes.push(rect(`${id}-moon-b`, width - 19, 2, 6, 6, SKY_BANDS[0]));
   flush("moon");
-  for (let x = 0; x < width; ) {
+  for (let x = 0; x < width;) {
     const w = 5 + Math.floor(random() * 7);
     const h = 4 + Math.floor(random() * 9);
     nodes.push(rect(`${id}-far-${x}`, x, skyBottom - h, w, h + 1, "#2e1b52"));
     if (random() < 0.5) {
-      nodes.push(rect(`${id}-farl-${x}`, x + 1, skyBottom - h + 2, 1, 1, LIGHTS[Math.floor(random() * 3)]));
+      nodes.push(
+        rect(
+          `${id}-farl-${x}`,
+          x + 1,
+          skyBottom - h + 2,
+          1,
+          1,
+          LIGHTS[Math.floor(random() * 3)],
+        ),
+      );
     }
     x += w;
   }
@@ -173,7 +204,16 @@ function buildLayout(layout: Layout): ReactNode {
     for (let x = 2; x + blockW < width; x += blockW + 4) {
       blockIndex += 1;
       const key = `${id}-blk-${blockIndex}`;
-      bodies.push(rect(key, x, y, blockW, blockH, BLOCKS[Math.floor(random() * BLOCKS.length)]));
+      bodies.push(
+        rect(
+          key,
+          x,
+          y,
+          blockW,
+          blockH,
+          BLOCKS[Math.floor(random() * BLOCKS.length)],
+        ),
+      );
       details.push(rect(`${key}-top`, x, y, blockW, 1, "#3a2c66"));
       for (let wy = y + 3; wy < y + blockH - 1; wy += 3) {
         for (let wx = x + 2; wx < x + blockW - 1; wx += 3) {
@@ -191,7 +231,17 @@ function buildLayout(layout: Layout): ReactNode {
         }
       }
       if (random() < 0.3) {
-        details.push(rect(`${key}-neon`, x, y + blockH - 1, blockW, 1, LIGHTS[Math.floor(random() * 3)], "scene-flicker"));
+        details.push(
+          rect(
+            `${key}-neon`,
+            x,
+            y + blockH - 1,
+            blockW,
+            1,
+            LIGHTS[Math.floor(random() * 3)],
+            "scene-flicker",
+          ),
+        );
       }
     }
   }
@@ -206,7 +256,11 @@ function buildLayout(layout: Layout): ReactNode {
     const y = skyBottom + 6 + Math.floor(random() * (riverY - skyBottom - 28));
     const nearRoad =
       waypoints.some(([wx, wy]) => Math.hypot(x + 9 - wx, y + 7 - wy) < 22) ||
-      waypoints.slice(1).some((to, i) => distanceToSegment(x + 9, y + 7, waypoints[i], to) < 14);
+      waypoints
+        .slice(1)
+        .some(
+          (to, i) => distanceToSegment(x + 9, y + 7, waypoints[i], to) < 14,
+        );
     if (nearRoad) continue;
     parks += 1;
     nodes.push(rect(`${id}-park-${parks}`, x, y, 18, 14, "#1c4a38"));
@@ -223,11 +277,18 @@ function buildLayout(layout: Layout): ReactNode {
     const [ax, ay] = waypoints[i];
     const steps = Math.ceil(Math.hypot(bx - ax, by - ay));
     for (let s = 0; s <= steps; s++) {
-      road.push([Math.round(ax + ((bx - ax) * s) / steps), Math.round(ay + ((by - ay) * s) / steps)]);
+      road.push([
+        Math.round(ax + ((bx - ax) * s) / steps),
+        Math.round(ay + ((by - ay) * s) / steps),
+      ]);
     }
   });
-  road.forEach(([x, y], i) => nodes.push(rect(`${id}-re-${i}`, x - 3, y - 3, 7, 7, ROAD_EDGE)));
-  road.forEach(([x, y], i) => nodes.push(rect(`${id}-rf-${i}`, x - 2, y - 2, 5, 5, ROAD_FILL)));
+  road.forEach(([x, y], i) =>
+    nodes.push(rect(`${id}-re-${i}`, x - 3, y - 3, 7, 7, ROAD_EDGE)),
+  );
+  road.forEach(([x, y], i) =>
+    nodes.push(rect(`${id}-rf-${i}`, x - 2, y - 2, 5, 5, ROAD_FILL)),
+  );
   road.forEach(([x, y], i) => {
     if (i % 7 < 3) nodes.push(rect(`${id}-rd-${i}`, x, y, 1, 1, "#ffc15a"));
   });
@@ -249,7 +310,16 @@ function buildLayout(layout: Layout): ReactNode {
     nodes.push(rect(`${id}-rt-${x}`, x, y, 2, 1, "#4d8fe0"));
     if (x % 10 === 0) {
       nodes.push(
-        rect(`${id}-rr-${x}`, x + 3, y + 3, 3, 1, LIGHTS[(x / 10) % 3 | 0], "scene-twinkle", 0.8),
+        rect(
+          `${id}-rr-${x}`,
+          x + 3,
+          y + 3,
+          3,
+          1,
+          LIGHTS[((x / 10) % 3) | 0],
+          "scene-twinkle",
+          0.8,
+        ),
       );
     }
   }
@@ -260,14 +330,117 @@ function buildLayout(layout: Layout): ReactNode {
   const [startX, startY] = point(START);
   nodes.push(rect(`${id}-stop-pad`, startX - 7, startY - 4, 14, 10, PLAZA));
   nodes.push(rect(`${id}-stop-pole`, startX - 1, startY - 8, 1, 10, "#8a8aa8"));
-  nodes.push(rect(`${id}-stop-sign`, startX - 3, startY - 11, 6, 4, "#ff4fd8", "scene-flicker"));
+  nodes.push(
+    rect(
+      `${id}-stop-sign`,
+      startX - 3,
+      startY - 11,
+      6,
+      4,
+      "#ff4fd8",
+      "scene-flicker",
+    ),
+  );
   nodes.push(rect(`${id}-stop-mark`, startX - 2, startY - 10, 4, 2, "#1a0738"));
 
   flush("stop");
 
+  // Water glints: two rows of dashes slide along the canal in opposite directions.
+  [0, 1].forEach((row) => {
+    const dashes: ReactNode[] = [];
+    for (let x = -6; x < width; x += 6) {
+      dashes.push(
+        rect(
+          `${id}-g${row}-${x}`,
+          x + row * 3,
+          riverY + 3 + row * 3,
+          3,
+          1,
+          row ? "#4d8fe0" : "#9cc8ff",
+          undefined,
+          row ? 0.7 : 0.6,
+        ),
+      );
+    }
+    nodes.push(
+      <g
+        key={`${id}-glint-${row}`}
+        className={`world-glint${row ? " world-glint-rev" : ""}`}
+      >
+        {mergeRects(dashes, `${id}-glint-${row}`)}
+      </g>,
+    );
+  });
+
+  // Traffic on the main road: one car each way on every stretch, plus a signal at each plaza.
+  waypoints.slice(1).forEach(([bx, by], i) => {
+    const [ax, ay] = waypoints[i];
+    const dx = bx - ax;
+    const dy = by - ay;
+    const length = Math.hypot(dx, dy);
+    [false, true].forEach((reverse) => {
+      const lane: [number, number] =
+        Math.abs(dx) > Math.abs(dy) ? [0, 1] : [1, 0];
+      const shift = reverse ? lane : [0, 0];
+      const headsRight = dx >= 0 !== reverse;
+      const style = {
+        "--dx": `${dx}px`,
+        "--dy": `${dy}px`,
+        "--dur": `${(length * CAR_PACE * (reverse ? 1.3 : 1)).toFixed(1)}s`,
+        "--delay": `${-((i * 5 + (reverse ? 9 : 2)) % 14)}s`,
+      } as CSSProperties;
+      const color = CAR_COLORS[(i * 2 + (reverse ? 1 : 0)) % CAR_COLORS.length];
+      nodes.push(
+        <g
+          key={`${id}-car-${i}-${reverse}`}
+          transform={`translate(${ax - 1 + shift[0]} ${ay - 1 + shift[1]})`}
+        >
+          <g
+            className={`world-car${reverse ? " world-car-rev" : ""}`}
+            style={style}
+          >
+            {rect(`${id}-cb-${i}-${reverse}`, 0, 0, 3, 2, color)}
+            {rect(
+              `${id}-ch-${i}-${reverse}`,
+              headsRight ? 3 : -1,
+              0,
+              1,
+              1,
+              CAR_LIGHT,
+            )}
+          </g>
+        </g>,
+      );
+    });
+    nodes.push(
+      rect(
+        `${id}-sig-r-${i}`,
+        bx + 9,
+        by - 5,
+        1,
+        1,
+        "#ff3b5c",
+        "world-signal world-signal-a",
+      ),
+      rect(
+        `${id}-sig-g-${i}`,
+        bx + 9,
+        by - 4,
+        1,
+        1,
+        "#4dff9a",
+        "world-signal world-signal-b",
+      ),
+    );
+  });
+
   // Drifting cloud over the skyline.
   nodes.push(
-    <g key={`${id}-cloud`} className="scene-cloud scene-cloud-slow" style={{ opacity: 0.8 }}>
+    <g
+      key={`${id}-cloud`}
+      className="scene-cloud scene-cloud-slow"
+      style={{ opacity: 0.8 }}
+    >
       {sprite(`${id}-c`, CLOUD, 30, 3)}
     </g>,
   );

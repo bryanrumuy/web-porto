@@ -46,3 +46,8 @@ export const CLOUD: Sprite = {
     "OOOOOOOOOOOOOOOOOOOOOOOO",
   ],
 };
+
+export const CLOUD_SMALL: Sprite = {
+  palette: { O: "#3a1c5e", H: "#6a2f7a" },
+  rows: ["...HHH......", ".HHOOOHH.HH.", "HOOOOOOOHOOH", "OOOOOOOOOOOO"],
+};

@@ -64,18 +64,26 @@ export function ShotGallery({
           <span />
           <span />
           <span />
-          <b>{current.label}</b>
+          <b key={`label-${current.src}`} className="shots-swap">
+            {current.label}
+          </b>
         </span>
         <Image
+          key={current.src}
           src={current.src}
           alt={current.alt}
           width={FULL_WIDTH}
           height={FULL_HEIGHT}
           sizes="(min-width: 1024px) 460px, 92vw"
-          className="shots-img"
+          className="shots-img shots-swap"
         />
       </button>
-      <figcaption className="shots-caption">{current.caption}</figcaption>
+      <figcaption
+        key={`cap-${current.src}`}
+        className="shots-caption shots-swap"
+      >
+        {current.caption}
+      </figcaption>
 
       <div
         role="group"
@@ -116,14 +124,20 @@ export function ShotGallery({
       >
         <div className="shots-dialog-body">
           <Image
+            key={current.src}
             src={current.src}
             alt={current.alt}
             width={FULL_WIDTH}
             height={FULL_HEIGHT}
             sizes="94vw"
-            className="shots-dialog-img"
+            className="shots-dialog-img shots-swap"
           />
-          <p className="shots-dialog-caption">{current.caption}</p>
+          <p
+            key={`dcap-${current.src}`}
+            className="shots-dialog-caption shots-swap"
+          >
+            {current.caption}
+          </p>
           <div className="shots-dialog-actions">
             <button
               type="button"

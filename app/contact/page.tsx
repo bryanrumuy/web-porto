@@ -5,9 +5,12 @@ import { DialogBox } from "../components/DialogBox";
 import { CopyEmail } from "../components/CopyEmail";
 import { TROPHY } from "../components/sprites";
 import { profile } from "../data";
-import { INVADER_A, INVADER_B, JOYSTICK } from "./art";
+import { BOLT, INVADER_A, INVADER_B, JOYSTICK } from "./art";
+import { Attract, Sides, Sky } from "./Decor";
+import { MergedSprite } from "./MergedSprite";
 import { CoinCabinet } from "./CoinCabinet";
 import "./contact.css";
+import "./contact-fx.css";
 
 export const metadata: Metadata = { title: "Contact | Bryan Rumuy" };
 
@@ -16,6 +19,7 @@ const INVADER_TONES = ["pink", "cyan", "amber", "cyan", "pink"] as const;
 function InvaderRow() {
   return (
     <div className="inv-band" aria-hidden>
+      <MergedSprite sprite={BOLT} scale={3} className="bolt bolt-l" />
       <div className="inv-row">
         {INVADER_TONES.map((tone, i) => (
           <span key={i} className={`inv inv-${tone}`}>
@@ -24,6 +28,7 @@ function InvaderRow() {
           </span>
         ))}
       </div>
+      <MergedSprite sprite={BOLT} scale={3} className="bolt bolt-r" />
     </div>
   );
 }
@@ -32,6 +37,8 @@ export default function ContactPage() {
   return (
     <PageShell current="/contact">
       <div className="cab">
+        <Sky />
+        <Sides />
         <InvaderRow />
 
         <CoinCabinet>
@@ -48,6 +55,8 @@ export default function ContactPage() {
               <span className="blink-arrow">Ready</span>
               <span>2UP</span>
             </div>
+
+            <Attract />
 
             <DialogBox speaker={profile.name} text={profile.seeking} />
 
@@ -107,7 +116,11 @@ export default function ContactPage() {
           </div>
         </CoinCabinet>
 
-        <div className="cab-floor" aria-hidden />
+        <div className="cab-floor" aria-hidden>
+          <span className="cab-plane">
+            <span className="cab-grid" />
+          </span>
+        </div>
       </div>
     </PageShell>
   );

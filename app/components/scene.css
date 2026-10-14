@@ -24,10 +24,20 @@
   height: 4px;
   background: transparent;
   box-shadow:
-    8vw 6vh #fff4e0, 17vw 14vh #fff4e0, 26vw 4vh #b9a2ff, 34vw 19vh #fff4e0,
-    43vw 9vh #fff4e0, 52vw 3vh #fff4e0, 61vw 16vh #b9a2ff, 69vw 7vh #fff4e0,
-    78vw 12vh #fff4e0, 86vw 4vh #fff4e0, 93vw 18vh #b9a2ff, 12vw 24vh #fff4e0,
-    58vw 26vh #fff4e0, 90vw 30vh #fff4e0;
+    8vw 6vh #fff4e0,
+    17vw 14vh #fff4e0,
+    26vw 4vh #b9a2ff,
+    34vw 19vh #fff4e0,
+    43vw 9vh #fff4e0,
+    52vw 3vh #fff4e0,
+    61vw 16vh #b9a2ff,
+    69vw 7vh #fff4e0,
+    78vw 12vh #fff4e0,
+    86vw 4vh #fff4e0,
+    93vw 18vh #b9a2ff,
+    12vw 24vh #fff4e0,
+    58vw 26vh #fff4e0,
+    90vw 30vh #fff4e0;
   opacity: 0.8;
 }
 
@@ -37,8 +47,12 @@
 }
 
 @keyframes scene-rain {
-  from { transform: translate(0, 0); }
-  to { transform: translate(-6px, 30px); }
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(-6px, 30px);
+  }
 }
 
 .scene-cloud {
@@ -51,8 +65,12 @@
 }
 
 @keyframes scene-drift {
-  from { transform: translateX(-60px); }
-  to { transform: translateX(340px); }
+  from {
+    transform: translateX(-60px);
+  }
+  to {
+    transform: translateX(340px);
+  }
 }
 
 .scene-twinkle {
@@ -60,7 +78,9 @@
 }
 
 @keyframes scene-twinkle {
-  50% { opacity: 0.15; }
+  50% {
+    opacity: 0.15;
+  }
 }
 
 /* Street life. Frame flips and walking both use hard steps. */
@@ -74,8 +94,12 @@
 }
 
 @keyframes scene-walk {
-  from { transform: translateX(-60px); }
-  to { transform: translateX(380px); }
+  from {
+    transform: translateX(-60px);
+  }
+  to {
+    transform: translateX(380px);
+  }
 }
 
 .scene-frame-a {
@@ -88,11 +112,15 @@
 }
 
 @keyframes scene-frame-a {
-  50% { opacity: 0; }
+  50% {
+    opacity: 0;
+  }
 }
 
 @keyframes scene-frame-b {
-  50% { opacity: 1; }
+  50% {
+    opacity: 1;
+  }
 }
 
 .scene-car {
@@ -105,8 +133,12 @@
 }
 
 @keyframes scene-drive {
-  from { transform: translateX(-120px); }
-  to { transform: translateX(400px); }
+  from {
+    transform: translateX(-120px);
+  }
+  to {
+    transform: translateX(400px);
+  }
 }
 
 .scene-blimp {
@@ -114,8 +146,12 @@
 }
 
 @keyframes scene-blimp {
-  from { transform: translateX(350px); }
-  to { transform: translateX(-60px); }
+  from {
+    transform: translateX(350px);
+  }
+  to {
+    transform: translateX(-60px);
+  }
 }
 
 .scene-steam {
@@ -123,8 +159,14 @@
 }
 
 @keyframes scene-steam {
-  from { transform: translateY(0); opacity: 1; }
-  to { transform: translateY(-18px); opacity: 0; }
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-18px);
+    opacity: 0;
+  }
 }
 
 .scene-flicker {
@@ -132,10 +174,21 @@
 }
 
 @keyframes scene-flicker {
-  0%, 91%, 94%, 100% { opacity: 1; }
-  92% { opacity: 0.3; }
-  93% { opacity: 0.8; }
-  95% { opacity: 0.5; }
+  0%,
+  91%,
+  94%,
+  100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 0.3;
+  }
+  93% {
+    opacity: 0.8;
+  }
+  95% {
+    opacity: 0.5;
+  }
 }
 
 /* Distant lightning: a rare, brief brightening of the whole scene. */
@@ -145,9 +198,18 @@
 }
 
 @keyframes scene-flash {
-  0%, 96%, 98%, 100% { opacity: 0; }
-  97% { opacity: 0.22; }
-  99% { opacity: 0.12; }
+  0%,
+  96%,
+  98%,
+  100% {
+    opacity: 0;
+  }
+  97% {
+    opacity: 0.22;
+  }
+  99% {
+    opacity: 0.12;
+  }
 }
 
 /* The sun sinks behind the horizon and the sky dims with it, then it rises again. */
@@ -157,8 +219,12 @@
 }
 
 @keyframes scene-sunset {
-  from { transform: translateY(0); }
-  to { transform: translateY(48px); }
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(48px);
+  }
 }
 
 .scene-dim {
@@ -168,8 +234,12 @@
 }
 
 @keyframes scene-dim {
-  from { opacity: 0; }
-  to { opacity: 0.45; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.45;
+  }
 }
 
 /* Bryan on the pavement. */
@@ -195,7 +265,9 @@
 }
 
 @keyframes scene-bob {
-  50% { transform: translateY(-1px); }
+  50% {
+    transform: translateY(-1px);
+  }
 }
 
 .scene-bubble {
@@ -207,4 +279,147 @@
 .scene-avatar:hover .scene-bubble,
 .scene-avatar:focus-visible .scene-bubble {
   opacity: 1;
+}
+
+/* Pointer parallax: layers hop a few pixels against the cursor (see ScenePointer). */
+.scene-par {
+  transform: translateX(calc(var(--px, 0) * var(--par, 0) * 1px));
+  transition: transform 0.3s steps(4, end);
+}
+
+.scene-par-sky {
+  --par: -1.5;
+}
+.scene-par-far {
+  --par: -3;
+}
+.scene-par-near {
+  --par: -5;
+}
+.scene-par-front {
+  --par: 7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-par {
+    transform: none;
+  }
+}
+
+/* A third, smaller cloud on its own pace. */
+.scene-cloud-mid {
+  animation-duration: 200s;
+  animation-delay: -40s;
+}
+
+/* Windows that switch off and on at their own pace (duration is set per window). */
+.scene-toggle {
+  animation: scene-toggle 10s steps(1, end) infinite;
+}
+
+@keyframes scene-toggle {
+  0%,
+  58% {
+    opacity: 1;
+  }
+  59%,
+  78% {
+    opacity: 0.08;
+  }
+  79%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Neon signs: the halo pulses, the bars use scene-flicker. */
+.scene-glow {
+  animation: scene-glow 2.4s steps(3, end) infinite;
+}
+
+@keyframes scene-glow {
+  from {
+    opacity: 0.1;
+  }
+  to {
+    opacity: 0.34;
+  }
+}
+
+/* Raindrops landing on the street. */
+.scene-splash {
+  opacity: 0;
+  animation: scene-splash 1.6s steps(1, end) infinite;
+}
+
+@keyframes scene-splash {
+  0%,
+  24%,
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  8% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  16% {
+    opacity: 0.7;
+    transform: translateY(-1px);
+  }
+}
+
+/* The bolt flashes in step with scene-flash. */
+.scene-bolt {
+  opacity: 0;
+  animation: scene-bolt 11s steps(1, end) infinite;
+}
+
+@keyframes scene-bolt {
+  0%,
+  96.5%,
+  97.6%,
+  98.8%,
+  100% {
+    opacity: 0;
+  }
+  97% {
+    opacity: 1;
+  }
+  98% {
+    opacity: 0.6;
+  }
+}
+
+/* Birds: the flock crosses the sky while each bird flaps between two frames. */
+.scene-bird {
+  animation: scene-fly var(--dur) steps(220, end) infinite;
+  animation-delay: var(--delay);
+}
+
+.scene-bird-rev {
+  animation-direction: reverse;
+}
+
+@keyframes scene-fly {
+  from {
+    transform: translateX(-40px);
+  }
+  to {
+    transform: translateX(360px);
+  }
+}
+
+.scene-blimp-far {
+  animation: scene-blimp-far 220s steps(180, end) infinite;
+  animation-delay: -70s;
+}
+
+@keyframes scene-blimp-far {
+  from {
+    transform: translateX(-30px);
+  }
+  to {
+    transform: translateX(350px);
+  }
 }

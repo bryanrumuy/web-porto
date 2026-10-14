@@ -59,7 +59,10 @@ export default function Home() {
                 className="animate-rise mt-8 flex flex-wrap gap-4"
                 style={{ animationDelay: "440ms" }}
               >
-                <Link href="/projects" className="pixel-btn pixel-btn-solid">
+                <Link
+                  href="/projects"
+                  className="pixel-btn pixel-btn-solid hero-cta"
+                >
                   View projects
                 </Link>
                 <Link href="/contact" className="pixel-btn">
@@ -85,17 +88,22 @@ export default function Home() {
           aria-labelledby="blocks-title"
           className="mx-auto max-w-6xl px-6 pb-20"
         >
-          <h2 id="blocks-title" className="font-display text-lg sm:text-xl">
+          <h2
+            id="blocks-title"
+            className="reveal font-display text-lg sm:text-xl"
+          >
             <span aria-hidden className="mr-3 text-pink">
               &gt;
             </span>
             World map
           </h2>
-          <p className="mb-8 mt-3 max-w-xl text-lg text-muted">
+          <p className="reveal mb-8 mt-3 max-w-xl text-lg text-muted">
             Walk to a block and open it. Each one has its own look, and every
             block you visit levels you up.
           </p>
-          <WorldMap nodes={NODES} terrain={<WorldTerrain />} />
+          <div className="reveal">
+            <WorldMap nodes={NODES} terrain={<WorldTerrain />} />
+          </div>
         </section>
       </main>
 

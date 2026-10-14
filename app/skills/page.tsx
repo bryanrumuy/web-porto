@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
 import { PageShell } from "../components/PageShell";
 import { skills } from "../data";
-import { Bat, Embers, Spider } from "./Ambience";
+import {
+  Bat,
+  Cobwebs,
+  Embers,
+  Mist,
+  Motes,
+  Spider,
+  WallRunes,
+} from "./Ambience";
 import { Chest } from "./Chest";
 import { Torch } from "./Torch";
 import "./skills.css";
 import "./ambience.css";
+import "./chest.css";
 
 export const metadata: Metadata = { title: "Skills | Bryan Rumuy" };
 
@@ -13,6 +22,9 @@ export default function SkillsPage() {
   return (
     <PageShell current="/skills">
       <div className="dungeon">
+        <WallRunes />
+        <Cobwebs />
+        <Motes />
         <Embers />
         <Bat />
 
@@ -35,15 +47,17 @@ export default function SkillsPage() {
 
         <div className="dungeon-body">
           <div className="rail" aria-hidden="true">
+            <Spider variant="slow" />
             <div className="rail-torch">
               <Torch side="left" />
             </div>
           </div>
           <div className="chest-row">
-            {skills.map((entry) => (
+            {skills.map((entry, index) => (
               <Chest
                 key={entry.group}
                 group={entry.group}
+                index={index}
                 tone={entry.tone}
                 items={entry.items}
               />
@@ -56,6 +70,7 @@ export default function SkillsPage() {
             </div>
           </div>
         </div>
+        <Mist />
         <div className="dungeon-floor" aria-hidden="true" />
       </div>
     </PageShell>
