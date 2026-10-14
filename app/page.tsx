@@ -65,6 +65,13 @@ export default function Home() {
                 <Link href="/contact" className="pixel-btn">
                   Contact me
                 </Link>
+                <a
+                  href="/CV_BryanRumuy_2026.pdf"
+                  download
+                  className="pixel-btn"
+                >
+                  Download CV
+                </a>
               </div>
             </div>
           </div>
