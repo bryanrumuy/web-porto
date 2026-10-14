@@ -7,7 +7,7 @@ export const profile = {
     "I build full-stack web systems and AI solutions that solve real business problems.",
   facts: [
     { label: "Based in", value: "Surabaya, Indonesia" },
-    { label: "Experience", value: "4 projects, 2 of them for clients" },
+    { label: "Experience", value: "5 projects, 2 of them for clients" },
     {
       label: "Open to",
       value: "Data Scientist, Web Developer and AI Automation roles",
@@ -30,6 +30,22 @@ export const education = {
 } as const;
 
 export const projects = [
+  {
+    title: "Alter: AI Customer-Service Assistant",
+    context: "Personal project, 2026 (proof of concept)",
+    tone: "cyan",
+    description:
+      "An AI assistant that answers customer chats for a small business, takes pickup orders, and hands complaints and emergencies to staff, with a web dashboard to run it. Demonstrated on Telegram with a fictional cafe.",
+    points: [
+      "Answers from the business's own knowledge: hours, menu and policies come from an editable knowledge base. The assistant does not invent prices or promises, and replies in the customer's language (English or Indonesian).",
+      'Takes orders end to end with function calling: it collects the items and pickup time, shows the total, and only after the customer confirms does a create_order function save the order. Item names are limited to the menu, the total is calculated by code instead of the model, and a repeated "yes" cannot create a duplicate order.',
+      "Knows when to hand over: complaints, refunds, discounts and unanswered questions go to a follow-up queue, and emergencies are flagged urgent and sent to the owner at once.",
+      "Staff dashboard (Node.js and SQLite): a kanban board of orders, a follow-up queue where staff reply to the customer, conversation history, and a knowledge editor. Moving an order to ready messages the customer automatically.",
+      "Hardened after a security and a code review: password login with throttling, an anti-forgery header, a host check, parameterised SQL, safe rendering of customer text, per-customer order limits, and an order that was already saved is still confirmed if a later model call fails.",
+      "Checked with 60 automated tests and scripted scenarios run against the real model (20 personal-assistant, 10 customer-service and 7 ordering scenarios). The data shown is fictional demo data.",
+      "Limits: it runs locally. The same core also runs as an unofficial WhatsApp bot, but the demo uses Telegram's official API. A production version would use the WhatsApp Business Platform and a hosted server.",
+    ],
+  },
   {
     title: "Office Finance System",
     context: "Freelance, Feb 2026 - Apr 2026",
@@ -88,6 +104,19 @@ export const projects = [
 
 export const skills = [
   {
+    group: "AI Automation",
+    tone: "pink",
+    items: [
+      "LLM API Integration (OpenAI)",
+      "Function Calling",
+      "Prompt Engineering",
+      "Conversational Agents",
+      "Workflow Automation",
+      "LLM Evaluation",
+      "Telegram Bot API",
+    ],
+  },
+  {
     group: "Data Science & Machine Learning",
     tone: "cyan",
     items: [
@@ -122,6 +151,7 @@ export const skills = [
     tone: "amber",
     items: [
       "MySQL",
+      "SQLite",
       "Role-based Access Control",
       "Two-factor Authentication",
       "Git & GitHub",
@@ -150,6 +180,28 @@ export type ProjectShotGroup = {
 export const projectShots: Readonly<
   Record<string, readonly ProjectShotGroup[]>
 > = {
+  "Alter: AI Customer-Service Assistant": [
+    {
+      name: "Staff dashboard",
+      note: "Demo data: a fictional cafe and fictional customers.",
+      shots: [
+        {
+          src: "/projects/alter-assistant/orders.webp",
+          label: "Orders",
+          caption:
+            "Orders: pickup orders taken by the assistant appear on a board by status. Moving one forward messages the customer automatically.",
+          alt: "Alter dashboard with order cards in three columns, New, In progress and Ready for pickup, each showing items, total and pickup time, above summary cards for active orders and revenue.",
+        },
+        {
+          src: "/projects/alter-assistant/followups.webp",
+          label: "Follow-ups",
+          caption:
+            "Follow-ups: the urgent allergy report is on top in red, followed by a catering enquiry and a refund request the assistant passed to the team, each with the bot's reply.",
+          alt: "Alter dashboard follow-up queue with an urgent allergy message from one customer and cards for a vegan question, a catering discount request and a refund request, each with Reply and Done buttons.",
+        },
+      ],
+    },
+  ],
   "Office Finance System": [
     {
       name: "Admin side",
@@ -394,6 +446,18 @@ export const projectShots: Readonly<
 
 // Skills and deliverables per project, shown as chips under the goals.
 export const projectStacks: Readonly<Record<string, readonly string[]>> = {
+  "Alter: AI Customer-Service Assistant": [
+    "Node.js",
+    "OpenAI API",
+    "Function Calling",
+    "Prompt Engineering",
+    "SQLite",
+    "Telegram Bot API",
+    "REST API",
+    "LLM Evaluation",
+    "Security Hardening",
+    "Automated Testing",
+  ],
   "Office Finance System": [
     "PHP",
     "Laravel",

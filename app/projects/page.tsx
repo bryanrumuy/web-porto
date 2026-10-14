@@ -12,12 +12,25 @@ import "./projects.css";
 
 export const metadata: Metadata = { title: "Projects | Bryan Rumuy" };
 
+// The sprites repeat when there are more projects than markers; the level number never does.
 const MARKERS = [
-  { sprite: FLAG, scale: 5, label: "Level 1", deco: "mill" },
-  { sprite: CASTLE, scale: 3, label: "Level 2", deco: "crossing" },
-  { sprite: TOWER, scale: 4, label: "Level 3", deco: "grove" },
-  { sprite: TREE, scale: 5, label: "Level 4", deco: "mill" },
+  { sprite: FLAG, scale: 5, deco: "mill" },
+  { sprite: CASTLE, scale: 3, deco: "crossing" },
+  { sprite: TOWER, scale: 4, deco: "grove" },
+  { sprite: TREE, scale: 5, deco: "mill" },
 ] as const;
+
+const COUNT_WORDS = [
+  "Zero",
+  "One",
+  "Two",
+  "Three",
+  "Four",
+  "Five",
+  "Six",
+  "Seven",
+  "Eight",
+];
 
 export default function ProjectsPage() {
   return (
@@ -29,7 +42,8 @@ export default function ProjectsPage() {
           <header className="map-sign pixel-box">
             <h1 className="font-display text-2xl sm:text-3xl">Projects</h1>
             <p className="mt-3 text-xl leading-snug text-muted">
-              Four projects, from client systems to a thesis, laid out as levels
+              {COUNT_WORDS[projects.length] ?? projects.length} projects, from
+              client systems to a thesis and an AI assistant, laid out as levels
               on a map.
             </p>
           </header>
@@ -62,7 +76,7 @@ export default function ProjectsPage() {
                       <Perch>
                         <Marker sprite={marker.sprite} scale={marker.scale} />
                       </Perch>
-                      <span className="stop-label">{marker.label}</span>
+                      <span className="stop-label">Level {index + 1}</span>
                     </div>
                     <LevelCard project={project} id={`level-${index + 1}`} />
                     <Deco kind={marker.deco} />
