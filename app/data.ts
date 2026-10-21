@@ -70,12 +70,13 @@ export const projects = [
     description:
       "A web-based financial management system that replaced manual office bookkeeping with one centralized digital workflow.",
     points: [
-      "Transaction tracking: income and expense records with receipt uploads (photo/PDF), auto-generated reference numbers, categories, departments, and batch entry.",
-      "Approval workflow: four roles (admin, finance, staff, executive) with separate permissions. Staff see only their own records, and creators cannot approve their own transactions.",
-      "Reporting: dashboard with cash-flow charts, monthly cash book with carried-over opening balances, budgets per category, and period locking. Exports to PDF and Excel (real formulas) and printable vouchers with amount in words.",
-      "Security: mandatory two-factor authentication for admin and finance, rate-limited login, CSRF/XSS/SQL-injection protection, private receipt storage, and an audit log of sensitive actions.",
-      "Data integrity: safe under concurrent use, with no duplicate reference numbers or lost updates, verified with parallel-process tests.",
-      "Quality: 840+ automated tests and CI. An internal 18-area audit covered access control, calculations, and fuzzing. Encrypted daily backups with a verified restore drill, plus full operations documentation.",
+      "Transaction tracking: income and expense records with receipt uploads (photo or PDF, stored privately), auto-generated reference numbers, categories, departments, payee and payment method, and batch entry for expenses.",
+      "Approval workflow: four roles (admin, finance, staff, executive) with separate permissions. Staff entries wait for approval and staff see only their own records, while entries by finance are approved straight away. Finance cannot approve its own entries. An admin can, but that is written to the activity log as a separate event so it is easy to find.",
+      "Reporting: dashboard with cash-flow charts, a monthly cash book with carried-over opening balances, budgets per category or department with usage warnings, and period locking. Reports export to PDF and Excel (with real SUM formulas), and printable vouchers show the amount in words and carry a watermark until the transaction is approved.",
+      "Security: mandatory two-factor authentication (authenticator app) for admin and finance, login and code attempts limited atomically, CSRF, XSS and SQL-injection protection, private receipt storage opened only through the app by authorised users, and an activity log of sign-ins, approvals and voucher views.",
+      "Data integrity under simultaneous use: reference numbers come from an atomic counter so they never repeat, a transaction can be approved only once, edits and approvals made on stale data are refused (version check), and closing a period holds even while others are saving. Tested with 16 parallel processes on MariaDB.",
+      "Quality: 840+ automated tests plus MySQL-specific tests, run in CI with a coverage threshold, a dependency security audit and a code-style check. Several self-audit rounds covered security, access control, calculations and fuzzing, and the findings were fixed with regression tests.",
+      "Operations: encrypted daily backups (an unencrypted archive is refused in production) with a documented restore drill, plus operations, restore and user guides in Indonesian. In-app notifications are included, and receipt OCR and an n8n webhook are optional and off by default.",
     ],
   },
   {
@@ -320,6 +321,33 @@ export const projectShots: Readonly<
           caption:
             "Period lock: closing a month stops any further changes to its transactions.",
           alt: "Period lock page with a form to lock a month and a list of locked periods, currently empty.",
+        },
+        {
+          src: "/projects/office-finance/activity-log.webp",
+          label: "Activity log",
+          caption:
+            "Activity log: sign-ins, approvals and voucher views are recorded with the user, time and IP address, and can be searched and filtered.",
+          alt: "Activity log page with a search box and action filter above a table of recent events: logins, an approved expense and two voucher views, each with user, time and IP address.",
+        },
+      ],
+    },
+    {
+      name: "Vouchers",
+      note: "All screenshots use test data and a fictional company.",
+      shots: [
+        {
+          src: "/projects/office-finance/voucher-pending.webp",
+          label: "Pending",
+          caption:
+            "Voucher while waiting: a cash-out voucher with the company letterhead and the amount in words. A diagonal 'not yet approved' watermark keeps it from being used as proof.",
+          alt: "Cash-out voucher with status Waiting for approval, payee, purpose, amount Rp 1,250,000 with the amount in words, signature boxes and a faint red watermark reading Belum disetujui.",
+        },
+        {
+          src: "/projects/office-finance/voucher-approved.webp",
+          label: "Approved",
+          caption:
+            "Voucher after approval: the watermark is gone, the status reads Approved, and the approver's name appears under the approval signature.",
+          alt: "The same cash-out voucher with status Approved, no watermark, and the approver's name under the Approved by signature box.",
         },
       ],
     },
@@ -572,7 +600,9 @@ export const projectStacks: Readonly<Record<string, readonly string[]>> = {
     "PHP",
     "Laravel",
     "MySQL",
+    "MariaDB",
     "Bootstrap",
+    "Alpine.js",
     "Chart.js",
     "Role-based Access Control",
     "Two-factor Authentication",
