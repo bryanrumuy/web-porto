@@ -86,11 +86,11 @@ export const projects = [
     description:
       "Web-based system for a skincare retailer to manage products, inventory, sales, and purchasing.",
     points: [
-      "Built an admin module covering product catalog, product variants (sizes and prices), suppliers, and sales and purchase invoices, replacing manual record-keeping and reducing input errors.",
-      "Implemented batch-level inventory with expiry dates: stock is auto-synced from valid batches, expired stock is excluded, and near-expiry batches can carry discounts that apply automatically to the storefront price.",
-      "Developed a customer-facing storefront with a searchable and filterable catalog, product detail pages with multi-image galleries, a shopping cart, and checkout for pickup at the store.",
-      "Designed the database schema and workflows from business requirements, documented through wireframes (15 screens) and a BPMN diagram of the variant and batch process.",
-      "Tested core transaction flows (invoice creation, stock deduction, batch expiry) to verify accurate processing.",
+      "Built an admin module covering the product catalog, product variants (sizes and prices), suppliers, and sales and purchase notes, replacing manual record-keeping and reducing input errors. Notes have a pending or paid status and can be printed, and a company profile feeds the printed documents.",
+      "Implemented batch-level inventory with expiry dates: every stock addition is a batch with its own quantity and expiry date, variant stock is recalculated from valid batches, and expired batches are left out. Marking a sales note as paid deducts stock from the batch nearest to expiry first.",
+      "Near-expiry discounts: the admin sets a discount on a batch, and the storefront shows the reduced price with a percentage badge by itself for as long as that batch is valid.",
+      "Developed a customer-facing storefront with a searchable and filterable catalog, product detail pages with multi-image galleries, a shopping cart, and a checkout that sends the order to the store as a WhatsApp message.",
+      "Designed the database schema (13 tables) and workflows from business requirements, documented through wireframes (15 screens) and a BPMN diagram of the variant and batch process.",
     ],
   },
   {
@@ -521,6 +521,13 @@ export const projectShots: Readonly<
           alt: "Product page for a facial cleanser with an image gallery, size options, price, quantity and an add to cart button.",
         },
         {
+          src: "/projects/fl-beauty/product-discount.webp",
+          label: "Discount",
+          caption:
+            "Near-expiry discount: when the admin puts a discount on a batch, the size shows its old price crossed out, the new price and a percentage badge.",
+          alt: "Product page for a moisturizer where the 30 gram size shows Rp 45,000 crossed out, Rp 36,000 and a minus 20 percent badge, next to a 100 gram size at full price.",
+        },
+        {
           src: "/projects/fl-beauty/cart.webp",
           label: "Cart",
           caption:
@@ -547,11 +554,25 @@ export const projectShots: Readonly<
           alt: "Product management page with an add product form above a table of products with batch and status columns.",
         },
         {
+          src: "/projects/fl-beauty/variants-batches.webp",
+          label: "Batches",
+          caption:
+            "Variants and batches: stock comes from batches, each with an expiry date, a status (safe, expiring soon or expired) and an optional discount.",
+          alt: "Page for managing the size variants of one product and its batches, listing two batches with quantity, expiry date, an expiry status badge and a discount field.",
+        },
+        {
           src: "/projects/fl-beauty/admin-sales-note.webp",
           label: "Sales note",
           caption:
             "Sales note: record an in-store or WhatsApp sale by picking products and quantities.",
           alt: "Sales note form with a choice of in-store visitor or WhatsApp order, a product search, and an items table with a total.",
+        },
+        {
+          src: "/projects/fl-beauty/sales-notes.webp",
+          label: "Sales notes",
+          caption:
+            "Sales notes: each note is pending until the admin marks it paid, and that is when stock is deducted from the batches. Customer names here are placeholders.",
+          alt: "List of sales notes with number, customer, total, date and a status badge, where one pending note has Detail, Pay and Delete buttons and the rest are paid.",
         },
       ],
     },
@@ -612,7 +633,15 @@ export const projectStacks: Readonly<Record<string, readonly string[]>> = {
     "Automated Testing & CI",
     "Backup & Recovery",
   ],
-  "Sales & Purchase Information System": ["PHP", "MySQL", "Bootstrap"],
+  "Sales & Purchase Information System": [
+    "PHP",
+    "MySQL",
+    "PDO",
+    "JavaScript",
+    "Bootstrap",
+    "Wireframing",
+    "BPMN",
+  ],
   "HerbalScan: Medicinal Leaf Identification Web App": [
     "Python",
     "TensorFlow / Keras",
