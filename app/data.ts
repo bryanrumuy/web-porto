@@ -2,7 +2,7 @@ export type Tone = "violet" | "pink" | "cyan" | "amber";
 
 export const profile = {
   name: "Bryan Rumuy",
-  role: "Data Scientist · Web Developer · AI Automation",
+  role: "Web Developer · AI Automation · Data Scientist",
   tagline:
     "I build full-stack web systems and AI solutions that solve real business problems.",
   facts: [
@@ -80,7 +80,7 @@ export const projects = [
     ],
   },
   {
-    title: "Sales & Purchase Information System",
+    title: "FL Beauty: Sales & Purchase Information System",
     context: "Campus internship (Kerja Praktik) for FL Beauty, Dec 2025 - Jul 2026",
     tone: "pink",
     description:
@@ -122,10 +122,39 @@ export const projects = [
 
 export const skills = [
   {
-    group: "AI Automation",
+    group: "Languages",
+    tone: "cyan",
+    items: ["PHP", "JavaScript", "TypeScript", "Python", "SQL", "C#"],
+  },
+  {
+    group: "Frameworks",
+    tone: "violet",
+    items: ["Laravel", "React", "Node.js", "Flask", "Tailwind CSS", "Bootstrap"],
+  },
+  {
+    group: "Databases",
+    tone: "amber",
+    items: ["MySQL", "PostgreSQL", "SQLite", "Supabase"],
+  },
+  {
+    group: "Data & ML",
     tone: "pink",
     items: [
-      "LLM API Integration (OpenAI)",
+      "TensorFlow",
+      "Keras",
+      "Pandas",
+      "NumPy",
+      "Deep Learning",
+      "Transfer Learning",
+      "Ensemble Learning",
+    ],
+  },
+  {
+    group: "AI & LLM",
+    tone: "cyan",
+    items: [
+      "Claude",
+      "OpenAI API",
       "Function Calling",
       "Prompt Engineering",
       "Conversational Agents",
@@ -135,51 +164,15 @@ export const skills = [
     ],
   },
   {
-    group: "Data Science & Machine Learning",
-    tone: "cyan",
-    items: [
-      "Python",
-      "TensorFlow / Keras",
-      "Machine Learning",
-      "Deep Learning (CNN)",
-      "Transfer Learning",
-      "Ensemble Learning",
-      "Data Analysis",
-      "Pandas",
-      "NumPy",
-    ],
-  },
-  {
-    group: "Web & Backend Development",
+    group: "Tools",
     tone: "violet",
     items: [
-      "PHP",
-      "Laravel",
-      "JavaScript",
-      "React",
-      "Node.js",
-      "Flask",
-      "REST API",
-      "Progressive Web Apps",
-      "Web Push",
-      "HTML & CSS",
-      "Bootstrap",
-      "C#",
-    ],
-  },
-  {
-    group: "Database, Security & Tools",
-    tone: "amber",
-    items: [
-      "MySQL",
-      "PostgreSQL",
-      "Supabase",
-      "SQLite",
-      "Role-based Access Control",
-      "Row Level Security",
-      "Two-factor Authentication",
       "Git & GitHub",
-      "Automated Testing & CI",
+      "CI & Automated Testing",
+      "RBAC & 2FA",
+      "Row Level Security",
+      "Cloudflare",
+      "PWA & Web Push",
       "AI-Assisted Development",
       "Microsoft Office",
     ],
@@ -495,7 +488,7 @@ export const projectShots: Readonly<
       ],
     },
   ],
-  "Sales & Purchase Information System": [
+  "FL Beauty: Sales & Purchase Information System": [
     {
       name: "Customer side",
       shots: [
@@ -633,7 +626,7 @@ export const projectStacks: Readonly<Record<string, readonly string[]>> = {
     "Automated Testing & CI",
     "Backup & Recovery",
   ],
-  "Sales & Purchase Information System": [
+  "FL Beauty: Sales & Purchase Information System": [
     "PHP",
     "MySQL",
     "PDO",
