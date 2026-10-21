@@ -120,18 +120,18 @@ export const projects = [
   },
 ] as const;
 
-// A star marks skills used mainly in projects built with AI assistance (the Skills page and the GitHub profile
-// carry the same note).
+// A star marks skills used mainly in projects built with AI assistance (the Skills page, the GitHub profile
+// and the CV carry the same note). Details such as Row Level Security, PWA or 2FA live in the project texts.
 export const skills = [
   {
     group: "Languages",
     tone: "cyan",
-    items: ["PHP", "JavaScript", "TypeScript*", "Python", "SQL", "C#"],
+    items: ["PHP", "JavaScript", "Python", "SQL"],
   },
   {
     group: "Frameworks",
     tone: "violet",
-    items: ["Laravel", "React*", "Node.js", "Flask", "Tailwind CSS*", "Bootstrap"],
+    items: ["Laravel", "React*", "Bootstrap"],
   },
   {
     group: "Databases",
@@ -141,41 +141,17 @@ export const skills = [
   {
     group: "Data & ML",
     tone: "pink",
-    items: [
-      "TensorFlow",
-      "Keras",
-      "Pandas",
-      "NumPy",
-      "Deep Learning",
-      "Transfer Learning",
-      "Ensemble Learning",
-    ],
+    items: ["TensorFlow", "Keras", "Pandas", "NumPy", "Deep Learning"],
   },
   {
     group: "AI & LLM",
     tone: "cyan",
-    items: [
-      "Claude",
-      "OpenAI API",
-      "Function Calling",
-      "Prompt Engineering",
-      "Conversational Agents",
-      "Workflow Automation",
-      "LLM Evaluation",
-    ],
+    items: ["Claude", "OpenAI API", "Function Calling", "Prompt Engineering"],
   },
   {
     group: "Tools",
     tone: "violet",
-    items: [
-      "Git & GitHub",
-      "CI & Automated Testing",
-      "RBAC & 2FA",
-      "Row Level Security*",
-      "Cloudflare*",
-      "PWA & Web Push*",
-      "AI-Assisted Development",
-    ],
+    items: ["Git & GitHub", "CI & Automated Testing", "AI-Assisted Development"],
   },
 ] as const;
 
