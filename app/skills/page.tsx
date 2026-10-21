@@ -40,6 +40,9 @@ export default function SkillsPage() {
               <p className="mt-2 text-xl text-foreground sm:text-2xl">
                 Everything in the pack, sorted by chest.
               </p>
+              <p className="mt-2 text-base text-muted">
+                * Built with AI assistance
+              </p>
             </div>
             <Torch side="right" />
           </div>

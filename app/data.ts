@@ -120,21 +120,23 @@ export const projects = [
   },
 ] as const;
 
+// A star marks skills used mainly in projects built with AI assistance (the Skills page and the GitHub profile
+// carry the same note).
 export const skills = [
   {
     group: "Languages",
     tone: "cyan",
-    items: ["PHP", "JavaScript", "TypeScript", "Python", "SQL", "C#"],
+    items: ["PHP", "JavaScript", "TypeScript*", "Python", "SQL", "C#"],
   },
   {
     group: "Frameworks",
     tone: "violet",
-    items: ["Laravel", "React", "Node.js", "Flask", "Tailwind CSS", "Bootstrap"],
+    items: ["Laravel", "React*", "Node.js", "Flask", "Tailwind CSS*", "Bootstrap"],
   },
   {
     group: "Databases",
     tone: "amber",
-    items: ["MySQL", "PostgreSQL", "SQLite", "Supabase"],
+    items: ["MySQL", "Supabase*"],
   },
   {
     group: "Data & ML",
@@ -160,7 +162,6 @@ export const skills = [
       "Conversational Agents",
       "Workflow Automation",
       "LLM Evaluation",
-      "Telegram Bot API",
     ],
   },
   {
@@ -170,11 +171,10 @@ export const skills = [
       "Git & GitHub",
       "CI & Automated Testing",
       "RBAC & 2FA",
-      "Row Level Security",
-      "Cloudflare",
-      "PWA & Web Push",
+      "Row Level Security*",
+      "Cloudflare*",
+      "PWA & Web Push*",
       "AI-Assisted Development",
-      "Microsoft Office",
     ],
   },
 ] as const;
