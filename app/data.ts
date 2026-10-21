@@ -81,10 +81,10 @@ export const projects = [
   },
   {
     title: "Sales & Purchase Information System",
-    context: "FL Beauty, Dec 2025 - Jul 2026",
+    context: "Campus internship (Kerja Praktik) for FL Beauty, Dec 2025 - Jul 2026",
     tone: "pink",
     description:
-      "Web-based system for a skincare retailer to manage products, inventory, sales, and purchasing.",
+      "Web-based system for a skincare retailer to manage products, inventory, sales, and purchasing. Built in a university internship program (Kerja Praktik), where students help a real business create the software it needs, together with a fellow student.",
     points: [
       "Built an admin module covering the product catalog, product variants (sizes and prices), suppliers, and sales and purchase notes, replacing manual record-keeping and reducing input errors. Notes have a pending or paid status and can be printed, and a company profile feeds the printed documents.",
       "Implemented batch-level inventory with expiry dates: every stock addition is a batch with its own quantity and expiry date, variant stock is recalculated from valid batches, and expired batches are left out. Marking a sales note as paid deducts stock from the batch nearest to expiry first.",
