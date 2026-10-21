@@ -7,7 +7,7 @@ export const profile = {
     "I build full-stack web systems and AI solutions that solve real business problems.",
   facts: [
     { label: "Based in", value: "Surabaya, Indonesia" },
-    { label: "Experience", value: "6 projects, 2 of them for clients" },
+    { label: "Experience", value: "6 projects, 3 of them for clients" },
     {
       label: "Open to",
       value: "Data Scientist, Web Developer and AI Automation roles",
@@ -32,7 +32,7 @@ export const education = {
 export const projects = [
   {
     title: "HanziLearn: Mandarin Tutoring Management App",
-    context: "Personal project for a private tutor, Oct 2026",
+    context: "Freelance, Oct 2026",
     tone: "pink",
     description:
       "A web app that runs a private Mandarin tutor's classes: students, lesson schedule, homework, invoices and self-study practice, with separate teacher and student logins. It installs on phones and sends push notifications. Demonstrated with fictional data.",
