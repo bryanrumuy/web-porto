@@ -65,7 +65,7 @@ export const projects = [
   },
   {
     title: "Office Finance System",
-    context: "Freelance, Feb 2026 - Apr 2026",
+    context: "Freelance, May 2026 - Oct 2026",
     tone: "violet",
     description:
       "A web-based financial management system that replaced manual office bookkeeping with one centralized digital workflow.",
@@ -81,7 +81,7 @@ export const projects = [
   },
   {
     title: "Sales & Purchase Information System",
-    context: "FL Beauty, Jan 2026 - Jul 2026",
+    context: "FL Beauty, Dec 2025 - Jul 2026",
     tone: "pink",
     description:
       "Web-based system for a skincare retailer to manage products, inventory, sales, and purchasing.",
