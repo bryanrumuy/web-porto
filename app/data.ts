@@ -7,7 +7,7 @@ export const profile = {
     "I build full-stack web systems and AI solutions that solve real business problems.",
   facts: [
     { label: "Based in", value: "Surabaya, Indonesia" },
-    { label: "Experience", value: "5 projects, 2 of them for clients" },
+    { label: "Experience", value: "6 projects, 2 of them for clients" },
     {
       label: "Open to",
       value: "Data Scientist, Web Developer and AI Automation roles",
@@ -30,6 +30,23 @@ export const education = {
 } as const;
 
 export const projects = [
+  {
+    title: "HanziLearn: Mandarin Tutoring Management App",
+    context: "Personal project for a private tutor, Oct 2026",
+    tone: "pink",
+    description:
+      "A web app that runs a private Mandarin tutor's classes: students, lesson schedule, homework, invoices and self-study practice, with separate teacher and student logins. It installs on phones and sends push notifications. Demonstrated with fictional data.",
+    points: [
+      "Roles and security: the teacher manages students, schedule, homework and finance, while each student sees only their own lessons, homework and bills. Access is enforced in the database with PostgreSQL Row Level Security, and a new teacher account starts with a temporary password that must be changed on first login.",
+      "Scheduling: weekly recurring lessons, editing or cancelling a lesson, a one-tap WhatsApp reminder, and an automatic reminder notification one hour before each lesson, sent by a scheduled database job.",
+      "Homework and billing: the teacher sets homework, students submit text or a photo of their answer, and the teacher grades it. Finished lessons add up into a monthly invoice per student, with payment tracking and a ready-to-send WhatsApp message.",
+      "Progress report: a monthly summary per student (lessons done, homework submitted and average score, practice) that the teacher can add a note to and send to the student or parent.",
+      "Self-study: HSK 2.0 and 3.0 vocabulary with flashcards, quizzes, writing, listening and sentence practice, using spaced repetition. A review screen lets the teacher check and correct each word's Indonesian meaning.",
+      "Installable on phones as a progressive web app, with push notifications for new homework, submissions and grades on iPhone and Android. The push service is written from scratch on Web Crypto (VAPID and RFC 8291 message encryption) instead of a push library.",
+      "Quality: 216 automated tests, a 35-page user manual in Indonesian, a data backup script, and deployment on Cloudflare Workers with a Supabase backend.",
+      "Limits: it is built for a single teacher, so serving several teachers would mean separate copies or a multi-teacher redesign. The live app and its code are private, and the screenshots use fictional demo data.",
+    ],
+  },
   {
     title: "Alter: AI Customer-Service Assistant",
     context: "Personal project, 2026 (proof of concept)",
@@ -138,9 +155,12 @@ export const skills = [
       "PHP",
       "Laravel",
       "JavaScript",
+      "React",
       "Node.js",
       "Flask",
       "REST API",
+      "Progressive Web Apps",
+      "Web Push",
       "HTML & CSS",
       "Bootstrap",
       "C#",
@@ -151,8 +171,11 @@ export const skills = [
     tone: "amber",
     items: [
       "MySQL",
+      "PostgreSQL",
+      "Supabase",
       "SQLite",
       "Role-based Access Control",
+      "Row Level Security",
       "Two-factor Authentication",
       "Git & GitHub",
       "Automated Testing & CI",
@@ -180,6 +203,69 @@ export type ProjectShotGroup = {
 export const projectShots: Readonly<
   Record<string, readonly ProjectShotGroup[]>
 > = {
+  "HanziLearn: Mandarin Tutoring Management App": [
+    {
+      name: "Teacher side",
+      note: "Demo data: fictional students. The app interface is in Indonesian.",
+      shots: [
+        {
+          src: "/projects/hanzilearn/dashboard.webp",
+          label: "Dashboard",
+          caption:
+            "Dashboard: today's lessons, active students and their HSK levels, homework waiting to be graded, and this month's invoices.",
+          alt: "HanziLearn teacher dashboard with cards for active students, lessons today, unpaid invoices and income, above lists of today's lessons, students with HSK levels, homework to grade and invoices.",
+        },
+        {
+          src: "/projects/hanzilearn/schedule.webp",
+          label: "Schedule",
+          caption:
+            "Schedule: the week at a glance, with Remind on WhatsApp, Edit, Done and Cancel on each lesson, and a note of the material covered.",
+          alt: "Weekly lesson schedule with day tabs and two lesson cards, each with buttons to remind on WhatsApp, edit, mark done or cancel.",
+        },
+        {
+          src: "/projects/hanzilearn/progress-report.webp",
+          label: "Progress report",
+          caption:
+            "Progress report: a monthly summary for one student, ready to copy or send to the student or parent on WhatsApp, with an optional note from the teacher.",
+          alt: "Student detail panel with a monthly progress report showing lessons done, homework submitted with the average score, and practice, above a teacher note box and Copy and Send on WhatsApp buttons.",
+        },
+        {
+          src: "/projects/hanzilearn/vocabulary-review.webp",
+          label: "Vocabulary review",
+          caption:
+            "Vocabulary review: the teacher checks each word's Indonesian meaning, then marks it correct or edits it. Reviewed words get a green label.",
+          alt: "HSK vocabulary list with draft and reviewed labels, a filter and search box, and Looks correct and Edit buttons on each word.",
+        },
+        {
+          src: "/projects/hanzilearn/finance.webp",
+          label: "Finance",
+          caption:
+            "Finance: lessons marked done are totalled per student for the month, issued as an invoice and sent with a WhatsApp message.",
+          alt: "Finance page with monthly totals above a list of three students, each with an amount, an unissued status, and Issue and Send on WhatsApp buttons.",
+        },
+      ],
+    },
+    {
+      name: "Student side",
+      note: "Demo data: a fictional student. The app interface is in Indonesian.",
+      shots: [
+        {
+          src: "/projects/hanzilearn/student-practice.webp",
+          label: "Practice",
+          caption:
+            "Practice: flashcards, quizzes, writing, listening, word match and sentences for the student's HSK level.",
+          alt: "Student self-study page with version and level pickers, six practice tabs and a flashcard showing a Chinese word.",
+        },
+        {
+          src: "/projects/hanzilearn/student-homework.webp",
+          label: "Homework",
+          caption:
+            "Homework: the student answers in text or with a photo and submits before the deadline.",
+          alt: "Student homework page with two assignments, each with an answer box, an upload photo button and a submit button.",
+        },
+      ],
+    },
+  ],
   "Alter: AI Customer-Service Assistant": [
     {
       name: "Staff dashboard",
@@ -458,6 +544,18 @@ export const projectLinks: Readonly<Record<string, ProjectLinks>> = {
 
 // Skills and deliverables per project, shown as chips under the goals.
 export const projectStacks: Readonly<Record<string, readonly string[]>> = {
+  "HanziLearn: Mandarin Tutoring Management App": [
+    "React",
+    "Vite",
+    "Supabase",
+    "PostgreSQL",
+    "Row Level Security",
+    "Edge Functions",
+    "Web Push",
+    "Progressive Web App",
+    "Cloudflare Workers",
+    "Automated Testing",
+  ],
   "Alter: AI Customer-Service Assistant": [
     "Node.js",
     "OpenAI API",
