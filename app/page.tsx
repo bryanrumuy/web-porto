@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BackgroundVideo } from "./components/BackgroundVideo";
 import { HeroScene } from "./components/HeroScene";
 import { STAGES } from "./components/PageShell";
 import { PixelSprite } from "./components/PixelSprite";
@@ -27,6 +28,13 @@ export default function Home() {
       <main className="flex-1">
         <section className="hero-sky relative flex min-h-[max(44rem,100svh)] items-start overflow-hidden">
           <HeroScene />
+          <BackgroundVideo
+            sources={[
+              { src: "/videos/hero.webm", type: "video/webm" },
+              { src: "/videos/hero.mp4", type: "video/mp4" },
+            ]}
+            className="opacity-40 mix-blend-screen"
+          />
           <div className="relative mx-auto grid w-full max-w-6xl gap-10 px-6 pointer-events-none pt-24 pb-[clamp(11rem,30vw,22rem)]">
             <div className="pointer-events-auto">
               <p className="animate-rise mb-8 flex items-center gap-3 font-display text-xs sm:text-sm">
