@@ -277,29 +277,43 @@ export const projectShots: Readonly<
   ],
   "BuildOffice AI: Virtual Office for Contractors": [
     {
-      name: "Demo video frames",
-      note: "Frames from the project's demo video. All companies, documents and figures are fictional.",
+      name: "The app, part by part",
+      note: "Screenshots of the running app in demo mode (no AI key), using fictional contractor documents. The interface here is in English; it also ships in Indonesian.",
       shots: [
         {
-          src: "/projects/buildoffice-ai/home.webp",
+          src: "/projects/buildoffice-ai/office.webp",
           label: "Office",
           caption:
-            "Office: ten AI agents, each with its own room, desk and job, in an isometric office view.",
-          alt: "Isometric 2.5D virtual office with agents at their desks beside a panel listing each agent by room, with the headline A living office, not a dashboard.",
+            "Home: the isometric office with ten agents, one room each. Pick a room to focus the camera, or use the brief panel to call a team meeting. The agent list shows what each one is doing.",
+          alt: "BuildOffice AI home screen with an isometric 2.5D office on the left and a panel on the right to start a meeting, above a list of agents by room.",
+        },
+        {
+          src: "/projects/buildoffice-ai/documents.webp",
+          label: "Documents",
+          caption:
+            "Documents: every uploaded file is read into editable fields (type, number, dates, value, summary, payment schedule). Nothing counts until a person verifies it, which is why 33 documents show as waiting.",
+          alt: "Documents tab with a drop area, a filter for verification status and a tender document opened as an editable form with a payment schedule.",
         },
         {
           src: "/projects/buildoffice-ai/finance.webp",
-          label: "Documents",
+          label: "Finance",
           caption:
-            "Documents: an uploaded invoice is read into type, party, amount, due date and category, ready for a person to verify.",
-          alt: "Document verification form for an invoice beside a card listing the extracted type, party, amount, due date and category with check marks.",
+            "Finance: bills to pay and money to receive, with overdue items marked in red, and a separate cash book. Payment terms from verified documents become bills automatically, and a person marks each one as paid.",
+          alt: "Finance tab listing unpaid bills with due dates, parties and amounts, several overdue ones marked in red, with Mark paid, Edit and Delete buttons.",
         },
         {
           src: "/projects/buildoffice-ai/projects.webp",
-          label: "Meeting",
+          label: "Projects",
           caption:
-            "Meeting: one click calls all agents to the meeting room to review open bills and project risks.",
-          alt: "Office view with all agents called to the meeting room and a brief reading Review open bills and project risks.",
+            "Projects: physical progress against plan and cost against progress for each project. This one is flagged Danger, 14 points behind plan with costs running ahead of progress, so a delay shows up early.",
+          alt: "Project health card marked Danger with warnings of being 14 points behind plan, a progress chart, and a monthly table of plan, progress, budget and costs.",
+        },
+        {
+          src: "/projects/buildoffice-ai/ask.webp",
+          label: "Ask",
+          caption:
+            "Ask and command: question the whole office or a single agent, such as the treasurer or the archivist, and get answers drawn from that agent's own data.",
+          alt: "Ask and Command tab with a row of agent buttons, an intro message and a text box with example questions about bills and contracts.",
         },
       ],
     },
