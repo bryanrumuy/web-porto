@@ -64,6 +64,23 @@ export const projects = [
     ],
   },
   {
+    title: "BuildOffice AI: Virtual Office for Contractors",
+    context: "Personal project, Oct - Nov 2026",
+    tone: "violet",
+    description:
+      "A virtual office run by ten AI agents for a construction contractor. Upload a PDF, photo or text file, or type an instruction, and the agents read it, book it, remind you and prepare the work, while a person verifies every number. Demonstrated with fictional contractor documents.",
+    points: [
+      "Document intake: PDFs, photos and text are read by an AI model and turned into structured data (type, parties, amounts, due dates, payment terms, project progress). Invoices become open bills and receipts become draft cash entries, each waiting for a person to verify it.",
+      "Ten agents with real posts: receptionist, document reader, archivist, treasurer, schedule reminder, project manager, daily assistant, report writer, system guardian and general staff. Each answers from its own data and tools and says so when a question belongs to a colleague.",
+      "Contractor mode: contracts, addenda, purchase orders, retention, guarantees, site and safety reports are understood out of the box. Project health compares physical progress with plan and cost with progress (SPI and CPI), so a project falling behind shows up early.",
+      "2.5D isometric office: the agents walk between rooms, hold meetings and react to what is happening. One click runs a team meeting from live data and produces minutes, decisions and follow-ups.",
+      "Human in control: agents only propose. Nothing is paid, deleted or sent without a person's approval, and outgoing messages wait in an approval box. Figures an agent writes are checked against the source data, and uploaded text is treated as untrusted.",
+      "Reports and operations: Word, Excel (with live formulas) and PDF files on request, optional Telegram reports and approval buttons, a monthly AI token cap, role-based accounts, rate-limited login, and settings encrypted with Windows DPAPI.",
+      "Two languages: the interface and the AI prompts ship in Indonesian and English, translated at load time from one code base.",
+      "Limits: it is a prototype that runs on one machine and is not exposed to the internet. The language layer has its own test, but a full regression suite for the rest is still to be written. The demo uses fictional contractor documents.",
+    ],
+  },
+  {
     title: "Office Finance System",
     context: "Freelance, May 2026 - Oct 2026",
     tone: "violet",
@@ -254,6 +271,35 @@ export const projectShots: Readonly<
           caption:
             "Follow-ups: the urgent allergy report is on top in red, followed by a catering enquiry and a refund request the assistant passed to the team, each with the bot's reply.",
           alt: "Alter dashboard follow-up queue with an urgent allergy message from one customer and cards for a vegan question, a catering discount request and a refund request, each with Reply and Done buttons.",
+        },
+      ],
+    },
+  ],
+  "BuildOffice AI: Virtual Office for Contractors": [
+    {
+      name: "Demo video frames",
+      note: "Frames from the project's demo video. All companies, documents and figures are fictional.",
+      shots: [
+        {
+          src: "/projects/buildoffice-ai/home.webp",
+          label: "Office",
+          caption:
+            "Office: ten AI agents, each with its own room, desk and job, in an isometric office view.",
+          alt: "Isometric 2.5D virtual office with agents at their desks beside a panel listing each agent by room, with the headline A living office, not a dashboard.",
+        },
+        {
+          src: "/projects/buildoffice-ai/finance.webp",
+          label: "Documents",
+          caption:
+            "Documents: an uploaded invoice is read into type, party, amount, due date and category, ready for a person to verify.",
+          alt: "Document verification form for an invoice beside a card listing the extracted type, party, amount, due date and category with check marks.",
+        },
+        {
+          src: "/projects/buildoffice-ai/projects.webp",
+          label: "Meeting",
+          caption:
+            "Meeting: one click calls all agents to the meeting room to review open bills and project risks.",
+          alt: "Office view with all agents called to the meeting room and a brief reading Review open bills and project risks.",
         },
       ],
     },
@@ -552,6 +598,10 @@ export const projectShots: Readonly<
 // page or video) when it exists: the buttons appear on the project card by themselves.
 export type ProjectLinks = { code?: string; demo?: string };
 export const projectLinks: Readonly<Record<string, ProjectLinks>> = {
+  "BuildOffice AI: Virtual Office for Contractors": {
+    code: "https://github.com/bryanrumuy/BuildOffice-AI",
+    demo: "/projects/buildoffice-ai/promo.mp4",
+  },
   "Alter: AI Customer-Service Assistant": {
     code: "https://github.com/bryanrumuy/alter-ai-assistant",
   },
@@ -585,6 +635,19 @@ export const projectStacks: Readonly<Record<string, readonly string[]>> = {
     "LLM Evaluation",
     "Security Hardening",
     "Automated Testing",
+  ],
+  "BuildOffice AI: Virtual Office for Contractors": [
+    "Node.js",
+    "Express",
+    "OpenAI API",
+    "Anthropic API",
+    "Prompt Engineering",
+    "Multi-agent Design",
+    "JavaScript",
+    "Canvas 2.5D Rendering",
+    "Word & Excel Generation",
+    "Telegram Bot API",
+    "i18n",
   ],
   "Office Finance System": [
     "PHP",
